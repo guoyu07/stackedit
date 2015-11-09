@@ -204,9 +204,9 @@ require([
 	"rangy",
 	"core",
 	"eventMgr",
-	"synchronizer",
-	"publisher",
-	"sharing",
+	// "synchronizer", 干掉synchronizer功能 ， @by wilee
+	// "publisher", 干掉publisher功能 ， @by wilee
+	// "sharing", 干掉sharing功能 ， @by wilee
 	"mediaImporter",
 	"css",
 	"rangy-cssclassapplier",

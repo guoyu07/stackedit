@@ -13,7 +13,7 @@ define([
 	"extensions/partialRendering",
 	"extensions/buttonMarkdownSyntax",
 	"extensions/googleAnalytics",
-	"extensions/twitter",
+	// "extensions/twitter", 干掉twiiter分享入口 @by wilee
 	"extensions/dialogAbout",
 	"extensions/dialogManagePublication",
 	"extensions/dialogManageSynchronization",
@@ -31,12 +31,12 @@ define([
 	"extensions/mathJax",
 	"extensions/emailConverter",
 	"extensions/scrollSync",
-	"extensions/buttonSync",
-	"extensions/buttonPublish",
+	// "extensions/buttonSync", 干掉同步入口 @by wilee
+	// "extensions/buttonPublish", 干掉上传入口 @by wilee
 	"extensions/buttonStat",
 	"extensions/buttonHtmlCode",
 	"extensions/buttonViewer",
-	"extensions/welcomeTour",
+	// "extensions/welcomeTour", 干掉用户引导 @by wilee
 	"extensions/shortcuts",
 	"extensions/userCustom",
 	"extensions/comments",

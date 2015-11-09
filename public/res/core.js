@@ -361,6 +361,9 @@ define([
 	}
 
 	var checkPayment = _.debounce(function() {
+		// 干掉检测捐赠入口  @by wilee
+		return true;
+
 		if(isOffline) {
 			return;
 		}
@@ -576,7 +579,8 @@ define([
 			document.getElementById('input-settings-theme').innerHTML = themeOptions;
 		}
 
-		$('.modal-header').append('<a class="dialog-header-message" href="http://classeur.io" target="_blank"><i class="icon-megaphone"></i> Try Classeur beta!</a>');
+		// 干掉http://classeur.io/入口 @by wilee
+		// $('.modal-header').append('<a class="dialog-header-message" href="http://classeur.io" target="_blank"><i class="icon-megaphone"></i> Try Classeur beta!</a>');
 		checkPayment();
 	});
 
