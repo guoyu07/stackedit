@@ -8,11 +8,12 @@ define([
 	"classes/Extension",
 	"settings",
 	"text!html/settingsExtensionsAccordion.html",
+	"extensions/buttonDocSettings",
 	"extensions/yamlFrontMatterParser",
 	"extensions/markdownSectionParser",
 	"extensions/partialRendering",
 	"extensions/buttonMarkdownSyntax",
-	"extensions/googleAnalytics",
+	// "extensions/googleAnalytics", 干掉google统计 @by wilee
 	// "extensions/twitter", 干掉twiiter分享入口 @by wilee
 	"extensions/dialogAbout",
 	"extensions/dialogManagePublication",
@@ -43,6 +44,8 @@ define([
 	"extensions/findReplace",
 	"extensions/htmlSanitizer",
 	"bootstrap",
+	"bootstrap-datepicker",
+	"extensions/buttonDocSave",
 	"jquery-waitforimages"
 ], function($, _, crel, mousetrap, utils, logger, Extension, settings, settingsExtensionsAccordionHTML) {
 
@@ -311,6 +314,16 @@ define([
 		});
 		var previewButtonsElt = document.querySelector('.extension-preview-buttons');
 		previewButtonsElt.appendChild(extensionPreviewButtonsFragment);
+
+		// Create extension menu buttons
+		logger.log("onCreateMenuButton");
+		var onCreateMenuButtonListenerList = getExtensionListenerList("onCreateMenuButton");
+		var extensionPreviewButtonsFragment = document.createDocumentFragment();
+		_.each(onCreateMenuButtonListenerList, function(listener) {
+			extensionPreviewButtonsFragment.appendChild(listener());
+		});
+		var previewButtonsElt = document.querySelector('.extension-menu-buttons');
+		previewButtonsElt && previewButtonsElt.appendChild(extensionPreviewButtonsFragment);
 
 		// Shall close every popover
 		mousetrap.bind('escape', function() {

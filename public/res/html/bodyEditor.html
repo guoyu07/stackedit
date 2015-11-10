@@ -84,6 +84,8 @@
 				</a>
 
 			</div>
+			<div class="list-group extension-menu-buttons">
+			</div>
 			<!-- <div class="list-group">
 
 				<a href="#" data-toggle="collapse" data-target=".collapse-synchronize"
@@ -152,7 +154,7 @@
 					data-target=".modal-import-harddrive-markdown"
 					class="list-group-item action-reset-input" href="#"><i
 					class="icon-hdd"></i> Import from disk</a>
-				<a href="#" data-toggle="collapse" data-target=".collapse-save-as"
+				<!-- <a href="#" data-toggle="collapse" data-target=".collapse-save-as"
 					class="list-group-item"><i class="icon-hdd"></i> Export to disk</a>
 				<div class="sub-menu collapse collapse-save-as clearfix">
 					<ul class="nav">
@@ -165,7 +167,7 @@
 						<li><a class="action-download-pdf" href="#"><i
 					        class="icon-download"></i> As PDF <sup class="text-danger">sponsor</sup></a></li>
 					</ul>
-				</div>
+				</div> 干掉导出文件功能 @by wilee -->
 
 	            <a data-toggle="modal" data-target=".modal-import-url"
 	                class="list-group-item action-reset-input" href="#"><i
@@ -1469,5 +1471,153 @@
 	</div>
 </div>
 
+
+<div class="modal fade modal-docsettings-agg">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h2 class="modal-title">Agg settings</h2>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal">
+				  <div class="form-group">
+				    <label for="aggName" class="col-sm-3 control-label">聚合页名称</label>
+				    <div class="col-sm-9">
+				      <input disabled="true" type="text" class="form-control" id="aggName" placeholder="Email">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="aggId" class="col-sm-3 control-label">聚合页ID</label>
+				    <div class="col-sm-9">
+				      <input disabled="true" type="text" class="form-control" id="aggId" placeholder="Password">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="aggContent" class="col-sm-3 control-label">聚合页设置</label>
+				    <div class="col-sm-9">
+				      <textarea class="form-control" rows="3" id="aggContent"></textarea>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <div class="col-sm-offset-3 col-sm-9">
+				      <button type="submit" class="btn btn-primary col-sm-2">确定</button> 
+				      <button type="submit" class="btn btn-default col-sm-2 col-sm-offset-1" data-dismiss="modal">取消</button>
+				    </div>
+				  </div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade modal-docsettings-bbox">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h2 class="modal-title">Bbox settings</h2>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal">
+				  <div class="form-group">
+				    <label for="bboxTitle" class="col-sm-2 control-label">分享标题</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="bboxTitle" placeholder="Email">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="bboxSpeaker" class="col-sm-2 control-label">主&emsp;&emsp;讲</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="bboxSpeaker" placeholder="Password">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="bboxTime" class="col-sm-2 control-label">活动时间</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control form-control-bbox-otime" id="bboxTime" placeholder="Password"  data-date-format="yyyy-mm-dd">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="bboxLocation" class="col-sm-2 control-label">地&emsp;&emsp;点</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="bboxLocation" placeholder="Password">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="bboxTip" class="col-sm-2 control-label">标&emsp;&emsp;签</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="bboxTip" placeholder="Password">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="bboxIntro" class="col-sm-2 control-label">简&emsp;&emsp;介</label>
+				    <div class="col-sm-10">
+				      <textarea class="form-control" rows="3" id="bboxIntro"></textarea>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="bboxImglink" class="col-sm-2 control-label">题图链接</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="bboxImglink" placeholder="Password">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="BboxPptlink" class="col-sm-2 control-label">PPT  链接</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="BboxPptlink" placeholder="Password">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <button type="submit" class="btn btn-primary col-sm-2">确定</button> 
+				      <button type="submit" class="btn btn-default col-sm-2 col-sm-offset-1" data-dismiss="modal">取消</button>
+				    </div>
+				  </div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade modal-docnew-agginfo">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h2 class="modal-title">AGG info settings</h2>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal">
+				  <div class="form-group">
+				    <label for="test1" class="col-sm-2 control-label">分享标题</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="test1" placeholder="Email">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="test2" class="col-sm-2 control-label">主&emsp;&emsp;讲</label>
+				    <div class="col-sm-10">
+				      <input type="text" class="form-control" id="test2" placeholder="Password">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <button type="submit" class="btn btn-primary col-sm-2">确定</button> 
+				      <button type="submit" class="btn btn-default col-sm-2 col-sm-offset-1" data-dismiss="modal">取消</button>
+				    </div>
+				  </div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div id="dropboxjs" data-app-key="x0k2l8puemfvg0o"></div>
