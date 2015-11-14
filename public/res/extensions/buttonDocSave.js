@@ -20,10 +20,13 @@ define([
     var selectedFileDesc;
     buttonDocSave.onFileSelected = function(fileDesc) {
         selectedFileDesc = fileDesc;
+        console.log(selectedFileDesc);
     };
 
     buttonDocSave.onFileCreated = function(fileDesc){
-        $('.modal-docnew-agginfo').modal();
+        if(fileDesc.fileType == 'agg'){
+            $('.modal-docnew-agginfo').modal();
+        }
     }
 
     buttonDocSave.onReady = function(){

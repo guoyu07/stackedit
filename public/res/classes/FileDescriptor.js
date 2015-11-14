@@ -32,6 +32,14 @@ define([
 				storage[this.fileIndex + ".content"] = content;
 			}
 		});
+		Object.defineProperty(this, 'fileType', {
+			get: function() {
+				return storage[this.fileIndex + ".fileType"];
+			},
+			set: function(fileType) {
+				storage[this.fileIndex + ".fileType"] = fileType;
+			}
+		});
 		Object.defineProperty(this, 'editorScrollTop', {
 			get: function() {
 				return this._editorScrollTop;

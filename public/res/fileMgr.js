@@ -52,6 +52,13 @@ define([
 
 	fileMgr.createFile = function(title, content, discussionListJSON, syncLocations, isTemporary) {
 		content = content !== undefined ? content : settings.defaultContent;
+
+		var fileType = 'local';
+		if( typeof title == 'object' ){
+			fileType = title.fileType;
+			title = undefined;
+		}
+
 		if(!title) {
 			// Create a file title
 			title = constants.DEFAULT_FILE_TITLE;
@@ -83,6 +90,7 @@ define([
 		storage[fileIndex + ".content"] = content;
 		storage[fileIndex + ".sync"] = sync;
 		storage[fileIndex + ".publish"] = ";";
+		storage[fileIndex + ".fileType"] = fileType;
 
 		// Create the file descriptor
 		var fileDesc = new FileDescriptor(fileIndex, title, syncLocations);
@@ -142,7 +150,16 @@ define([
 
 		var $fileTitleElt = $('.file-title-navbar');
 		var $fileTitleInputElt = $(".input-file-title");
-		$(".action-create-file").click(function() {
+		$(".action-create-agg-file").click(function() {
+			setTimeout(function() {
+				var fileDesc = fileMgr.createFile({
+					fileType : 'agg'
+				});
+				fileMgr.selectFile(fileDesc);
+				$fileTitleElt.click();
+			}, 400);
+		});
+		$(".action-create-local-file").click(function() {
 			setTimeout(function() {
 				var fileDesc = fileMgr.createFile();
 				fileMgr.selectFile(fileDesc);
