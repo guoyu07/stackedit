@@ -311,9 +311,9 @@
 			<div class="modal-body">
 				<p>Please provide the image URL and an optional title:</p>
 				<div class="input-group">
-					<span class="input-group-addon"><i class="icon-picture"></i></span><input
-						id="input-insert-image" type="text" class="col-sm-5 form-control"
-						placeholder='http://example.com/image.jpg "optional title"' />
+					<span class="input-group-addon"><i class="icon-picture"></i></span>
+					<input id="input-insert-image" type="text" class="col-sm-5 form-control" placeholder='http://example.com/image.jpg "optional title"' />
+					<span class="input-group-addon btn" id="action-agg-uploadimg">选择文件</span>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -1290,6 +1290,14 @@
                                         your own CouchDB...</a></span>
                                 </div>
 							</div>
+							<div class="form-group">
+								<label class="col-sm-4 control-label"
+									for="input-settings-uploadfile-path">uploadFilePath</label>
+								<div class="col-sm-7">
+									<input type="text" id="input-settings-upload-file-path"
+										class="form-control">
+                                </div>
+							</div>
 						</div>
 					</div>
 					<div class="tab-pane" id="tabpane-settings-extensions">
@@ -1597,22 +1605,28 @@
 				<h2 class="modal-title">AGG info settings</h2>
 			</div>
 			<div class="modal-body">
-				<form class="form-horizontal">
+				<form class="form-horizontal" id="createDocAggForm">
 				  <div class="form-group">
-				    <label for="aggTitle" class="col-sm-2 control-label">AggName</label>
+				    <label for="createDocAggDocTitle" class="col-sm-2 control-label">DocTitle</label>
 				    <div class="col-sm-10">
-				      <select class="form-control docnew-agginfo-title" id="aggTitle">
+				      <input name="aggDoctitle" class="form-control" id="createDocAggDocTitle" required/>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="createDocAggName" class="col-sm-2 control-label">AggName</label>
+				    <div class="col-sm-10">
+				      <select name="aggName" class="form-control docnew-agginfo-title" id="createDocAggName" required>
 				      	<option>请选择一个聚合页</option>
 						<option class="docnew-agginfo-title-loading">加载中...</option>
 				      </select>
 				    </div>
 				  </div>
-				  <div class="form-group">
-				    <label for="test2" class="col-sm-2 control-label">DocList</label>
+<!-- 			  <div class="form-group">
+				    <label for="createDocAggDoclist" class="col-sm-2 control-label">AggDoclist</label>
 				    <div class="col-sm-10">
-				      <input type="text" class="form-control" id="test2" placeholder="Password">
+				      <textarea name="aggDoclist" class="form-control" id="createDocAggDoclist"></textarea>
 				    </div>
-				  </div>
+				  </div> -->
 				  <div class="form-group">
 				    <div class="col-sm-offset-2 col-sm-10">
 				      <button type="submit" class="btn btn-primary col-sm-2">确定</button> 

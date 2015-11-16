@@ -40,6 +40,22 @@ define([
 				storage[this.fileIndex + ".fileType"] = fileType;
 			}
 		});
+		Object.defineProperty(this, 'aggName', {
+			get: function() {
+				return storage[this.fileIndex + ".aggName"];
+			},
+			set: function(aggName) {
+				storage[this.fileIndex + ".aggName"] = aggName;
+			}
+		});
+		Object.defineProperty(this, 'aggTitle', {
+			get: function() {
+				return storage[this.fileIndex + ".aggTitle"];
+			},
+			set: function(aggTitle) {
+				storage[this.fileIndex + ".aggTitle"] = aggTitle;
+			}
+		});
 		Object.defineProperty(this, 'editorScrollTop', {
 			get: function() {
 				return this._editorScrollTop;

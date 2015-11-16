@@ -11,13 +11,14 @@ define([
 	"settings",
 	"eventMgr",
 	"monetizejs",
+	"fex-webuploader",
 	"text!html/bodyEditor.html",
 	"text!html/bodyViewer.html",
 	"text!html/tooltipSettingsTemplate.html",
 	"text!html/tooltipSettingsPdfOptions.html",
 	"storage",
-	'pagedown'
-], function($, _, crel, editor, layout, constants, utils, storage, settings, eventMgr, MonetizeJS, bodyEditorHTML, bodyViewerHTML, settingsTemplateTooltipHTML, settingsPdfOptionsTooltipHTML) {
+	'pagedown',
+], function($, _, crel, editor, layout, constants, utils, storage, settings, eventMgr, MonetizeJS, WebUploader, bodyEditorHTML, bodyViewerHTML, settingsTemplateTooltipHTML, settingsPdfOptionsTooltipHTML) {
 
 	var core = {};
 
@@ -147,6 +148,8 @@ define([
 		utils.setInputValue("#textarea-settings-pdf-options", settings.pdfOptions);
 		// CouchDB URL
 		utils.setInputValue("#input-settings-couchdb-url", settings.couchdbUrl);
+		// UploadFile Path
+		utils.setInputValue("#input-settings-upload-file-path", settings.uploadFilePath);
 
 		// Load extension settings
 		eventMgr.onLoadSettings();
@@ -423,11 +426,45 @@ define([
 			}
 		});
 
+		var Uploader;
 		// Hide events on "insert link" and "insert image" dialogs
 		$(".modal-insert-link, .modal-insert-image").on('hidden.bs.modal', function() {
 			if(core.insertLinkCallback !== undefined) {
 				core.insertLinkCallback(null);
 				core.insertLinkCallback = undefined;
+			}
+		}).on('shown.bs.modal' , function(){
+			console.log(1111);
+			if(settings.uploadFilePath){
+			    var _setUploadImgbtn = function() {
+			        var uploader = WebUploader.create({
+			            // 选完文件后，是否自动上传。
+			            auto: true,
+			            // 文件接收服务端。
+			            server: settings.uploadFilePath,
+			            // 选择文件的按钮。可选。
+			            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+			            pick: {
+			            	id:'#action-agg-uploadimg',
+			            	innerHTML: '选择文件'
+			            },
+			            // 只允许选择图片文件。
+			            accept: {
+			                title: 'Images',
+			                extensions: 'gif,jpg,jpeg,bmp,png',
+			                mimeTypes: 'image/*'
+			            }
+			        });
+			        uploader.on('uploadSuccess', function(file) {
+			            console.log(file,'uploadSuccess')
+			        });
+			        uploader.on('uploadError', function(file) {
+			        	console.log(file);
+			            eventMgr.onError('上传图片失败，请稍后再试！');
+			        });
+			        return uploader;
+			    }
+			    Uploader = Uploader || _setUploadImgbtn();
 			}
 		});
 
@@ -578,6 +615,7 @@ define([
 			}, '');
 			document.getElementById('input-settings-theme').innerHTML = themeOptions;
 		}
+
 
 		// 干掉http://classeur.io/入口 @by wilee
 		// $('.modal-header').append('<a class="dialog-header-message" href="http://classeur.io" target="_blank"><i class="icon-megaphone"></i> Try Classeur beta!</a>');

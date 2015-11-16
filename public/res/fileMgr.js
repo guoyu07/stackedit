@@ -53,9 +53,10 @@ define([
 	fileMgr.createFile = function(title, content, discussionListJSON, syncLocations, isTemporary) {
 		content = content !== undefined ? content : settings.defaultContent;
 
-		var fileType = 'local';
+		var fileType = 'local', currentFile;
 		if( typeof title == 'object' ){
 			fileType = title.fileType;
+			currentFile = title.currentFile;
 			title = undefined;
 		}
 
@@ -100,7 +101,9 @@ define([
 		if(!isTemporary) {
 			utils.appendIndexToArray("file.list", fileIndex);
 			fileSystem[fileIndex] = fileDesc;
-			eventMgr.onFileCreated(fileDesc);
+			eventMgr.onFileCreated(fileDesc,{
+				currentFile:currentFile
+			});
 		}
 		return fileDesc;
 	};
@@ -153,7 +156,8 @@ define([
 		$(".action-create-agg-file").click(function() {
 			setTimeout(function() {
 				var fileDesc = fileMgr.createFile({
-					fileType : 'agg'
+					fileType : 'agg',
+					currentFile : fileMgr.currentFile
 				});
 				fileMgr.selectFile(fileDesc);
 				$fileTitleElt.click();

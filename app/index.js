@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var compression = require('compression');
 var serveStatic = require('serve-static');
+var data = require('./data').data;
 
 // Configure ejs engine
 app.set('views', __dirname + '/../views');
@@ -49,6 +50,12 @@ app.get('/editor', function(req, res) {
 // Serve viewer.html in /viewer
 app.get('/viewer', function(req, res) {
 	res.renderDebug('viewer.html');
+});
+
+// 模拟数据接口
+app.all('/data/*', function(req, res) {
+	var curPath = req.path.slice(5);
+	res.end(JSON.stringify(data[curPath] || {}))
 });
 
 // Error 404

@@ -58,7 +58,8 @@ define([
 			'}'
 		].join('\n'),
 		couchdbUrl: constants.COUCHDB_URL,
-		extensionSettings: {}
+		extensionSettings: {},
+		uploadFilePath: '/up/pic_upload'
 	};
 
 	try {
