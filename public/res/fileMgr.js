@@ -96,6 +96,7 @@ define([
 		storage[fileIndex + ".sync"] = sync;
 		storage[fileIndex + ".publish"] = ";";
 		storage[fileIndex + ".fileType"] = fileType;
+		storage[fileIndex + ".aggName"] = aggName || "";
 
 		// Create the file descriptor
 		var fileDesc = new FileDescriptor(fileIndex, title, syncLocations);

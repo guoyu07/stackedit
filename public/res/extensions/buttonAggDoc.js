@@ -104,8 +104,8 @@ define([
         }*/
 
     buttonAggDoc.onFileCreated = function(fileDesc, opt) {
+        // if there has aggName , dont show the modal
         if (opt.aggName){
-            selectedFileDesc.aggName = opt.aggName;
             return;
         }
 
