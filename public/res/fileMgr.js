@@ -51,14 +51,18 @@ define([
 	};
 
 	fileMgr.createFile = function(title, content, discussionListJSON, syncLocations, isTemporary) {
-		content = content !== undefined ? content : settings.defaultContent;
-
-		var fileType = 'local', currentFile;
+		var fileType = 'local', currentFile, aggName;
 		if( typeof title == 'object' ){
-			fileType = title.fileType;
+			fileType 	= title.fileType;
+			fileTitle 	= title.title;
+			content 	= title.content;
+			aggName 	= title.aggName;
 			currentFile = title.currentFile;
-			title = undefined;
+
+			title = fileTitle;
 		}
+
+		content = content !== undefined ? content : settings.defaultContent;
 
 		if(!title) {
 			// Create a file title
@@ -102,6 +106,7 @@ define([
 			utils.appendIndexToArray("file.list", fileIndex);
 			fileSystem[fileIndex] = fileDesc;
 			eventMgr.onFileCreated(fileDesc,{
+				aggName:aggName,
 				currentFile:currentFile
 			});
 		}

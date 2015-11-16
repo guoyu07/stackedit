@@ -4,15 +4,15 @@ define([
     "classes/Extension",
     "text!html/buttonAggDocSave.html",
     "text!html/buttonAggDocSettings.html",
-    "JSONEditor",
-], function($, storage, Extension, buttonAggDocHTML, buttonAggDocSettingsHTML, JSONEditor) {
+    "fileSystem",
+], function($, storage, Extension, buttonAggDocHTML, buttonAggDocSettingsHTML, fileSystem) {
     var _updateDoc = function(data, callback) {
         callback = callback || function() {
             eventMgr.onMessage('更新文档成功！');
         };
         // extend doc Info
-        if (window.Meilishuo && window.Meilishuo.constant && window.Meilishuo.constant.docInfo) {
-            _.extend(data, window.Meilishuo.constant.docInfo);
+        if (window.Meilishuo && window.Meilishuo.constant && window.Meilishuo.constant.docInfoSubmit) {
+            _.extend(data, window.Meilishuo.constant.docInfoSubmit);
         }
         $.post('/data/agg/docedit', data, function(res) {
             if (res.code == 0) {
@@ -28,6 +28,35 @@ define([
                 eventMgr.onError(res.message)
             }
         }, 'JSON')
+    }
+
+    var _openAggDocFile = function(){
+        if (!window.Meilishuo || !window.Meilishuo.constant || !window.Meilishuo.constant.docInfo) {return;}
+        
+        var curDocInfo = window.Meilishuo.constant.docInfo , curFileDesc;
+        var aggDocList = _.filter(fileSystem, function(fileDesc) {
+            return fileDesc.fileType == 'agg' && fileDesc.aggName == curDocInfo.aggName && fileDesc.title == curDocInfo.title;
+        });
+        var _createFile = function(){
+            setTimeout(function() {
+                curFileDesc = fileMgr.createFile({
+                    fileType: 'agg',
+                    title: curDocInfo.title,
+                    aggName: curDocInfo.aggName,
+                    content: curDocInfo.mdContent
+                });
+                fileMgr.selectFile(curFileDesc);
+            },400)
+        }
+
+        if(aggDocList.length == 1){
+            fileMgr.selectFile(aggDocList[0])
+        }else if(aggDocList.length == 0){
+            _createFile();
+        }else{
+            fileMgr.onError('aggName为'+curDocInfo.aggName+'，且docTitle为'+curDocInfo.title+'的文档有'+aggDocList.length+'个，请删除后再试');
+        }
+
     }
 
 
@@ -75,6 +104,11 @@ define([
         }*/
 
     buttonAggDoc.onFileCreated = function(fileDesc, opt) {
+        if (opt.aggName){
+            selectedFileDesc.aggName = opt.aggName;
+            return;
+        }
+
         if (fileDesc.fileType == 'agg') {
             // show agg ingo modal
             $modalDocnewAgginfo.modal();
@@ -144,6 +178,8 @@ define([
 
         })
 
+        // 打开agg文档
+        _openAggDocFile();
         //setInterval(function(){
         //console.log(storage[selectedFileDesc.fileIndex+'.content']);
         //},2000)

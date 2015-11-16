@@ -35,14 +35,14 @@ define([
 		isUserReal = true;
 		userActive = true;
 		var currentTime = utils.currentTime;
-		if(currentTime > userLastActivity + 1000) {
+		if (currentTime > userLastActivity + 1000) {
 			userLastActivity = currentTime;
 			eventMgr.onUserActive();
 		}
 	}
 
 	function isUserActive() {
-		if(utils.currentTime - userLastActivity > constants.USER_IDLE_THRESHOLD) {
+		if (utils.currentTime - userLastActivity > constants.USER_IDLE_THRESHOLD) {
 			userActive = false;
 		}
 		return userActive && windowUnique;
@@ -52,17 +52,17 @@ define([
 	var windowId;
 
 	function checkWindowUnique() {
-		if(isUserReal === false || windowUnique === false) {
+		if (isUserReal === false || windowUnique === false) {
 			return;
 		}
-		if(windowId === undefined) {
+		if (windowId === undefined) {
 			windowId = utils.id();
 			storage.frontWindowId = windowId;
 		}
 		var frontWindowId = storage.frontWindowId;
-		if(frontWindowId != windowId) {
+		if (frontWindowId != windowId) {
 			windowUnique = false;
-			if(intervalId !== undefined) {
+			if (intervalId !== undefined) {
 				clearInterval(intervalId);
 			}
 			$(".modal").modal("hide");
@@ -77,13 +77,14 @@ define([
 	var offlineTime = utils.currentTime;
 	core.setOffline = function() {
 		offlineTime = utils.currentTime;
-		if(isOffline === false) {
+		if (isOffline === false) {
 			isOffline = true;
 			eventMgr.onOfflineChanged(true);
 		}
 	};
+
 	function setOnline() {
-		if(isOffline === true) {
+		if (isOffline === true) {
 			isOffline = false;
 			eventMgr.onOfflineChanged(false);
 		}
@@ -91,7 +92,7 @@ define([
 
 	function checkOnline() {
 		// Try to reconnect if we are offline but we have some network
-		if(isOffline === true && navigator.onLine === true && offlineTime + constants.CHECK_ONLINE_PERIOD < utils.currentTime) {
+		if (isOffline === true && navigator.onLine === true && offlineTime + constants.CHECK_ONLINE_PERIOD < utils.currentTime) {
 			offlineTime = utils.currentTime;
 			// Try to download anything to test the connection
 			$.ajax({
@@ -197,13 +198,15 @@ define([
 		newSettings.pdfOptions = utils.getInputJSONValue("#textarea-settings-pdf-options", event);
 		// CouchDB URL
 		newSettings.couchdbUrl = utils.getInputValue("#input-settings-couchdb-url", event);
+		// UploadFile Path
+		newSettings.uploadFilePath = utils.getInputValue("#input-settings-upload-file-path", event);
 
 		// Save extension settings
 		newSettings.extensionSettings = {};
 		eventMgr.onSaveSettings(newSettings.extensionSettings, event);
 
-		if(!event.isPropagationStopped()) {
-			if(settings.dropboxFullAccess !== newSettings.dropboxFullAccess) {
+		if (!event.isPropagationStopped()) {
+			if (settings.dropboxFullAccess !== newSettings.dropboxFullAccess) {
 				storage.removeItem('dropbox.lastChangeId');
 			}
 			$.extend(settings, newSettings);
@@ -216,12 +219,12 @@ define([
 	var pagedownEditor;
 	var fileDesc;
 	core.initEditor = function(fileDescParam) {
-		if(fileDesc !== undefined) {
+		if (fileDesc !== undefined) {
 			eventMgr.onFileClosed(fileDesc);
 		}
 		fileDesc = fileDescParam;
 
-		if(pagedownEditor !== undefined) {
+		if (pagedownEditor !== undefined) {
 			// If the editor is already created
 			editor.undoMgr.init();
 			return pagedownEditor.uiManager.setUndoRedoButtonStates();
@@ -254,7 +257,7 @@ define([
 		// Custom insert image dialog
 		pagedownEditor.hooks.set("insertImageDialog", function(callback) {
 			core.insertLinkCallback = callback;
-			if(core.catchModal) {
+			if (core.catchModal) {
 				return true;
 			}
 			utils.resetModalInputs();
@@ -294,10 +297,9 @@ define([
 		// Add RTL class
 		document.body.className += ' ' + settings.editMode;
 
-		if(window.viewerMode === true) {
+		if (window.viewerMode === true) {
 			document.body.innerHTML = bodyViewerHTML;
-		}
-		else {
+		} else {
 			document.body.innerHTML = bodyEditorHTML;
 		}
 
@@ -307,7 +309,7 @@ define([
 		// listen to online/offline events
 		$(window).on('offline', core.setOffline);
 		$(window).on('online', setOnline);
-		if(navigator.onLine === false) {
+		if (navigator.onLine === false) {
 			core.setOffline();
 		}
 
@@ -321,7 +323,7 @@ define([
 		intervalId = window.setInterval(function() {
 			utils.updateCurrentTime();
 			checkWindowUnique();
-			if(isUserActive() === true || window.viewerMode === true) {
+			if (isUserActive() === true || window.viewerMode === true) {
 				eventMgr.onPeriodicRun();
 				checkOnline();
 			}
@@ -356,7 +358,7 @@ define([
 				'yearly'
 			]
 		}, function(err, payments) {
-			if(isSponsor(payments)) {
+			if (isSponsor(payments)) {
 				eventMgr.onMessage('Thank you for sponsoring StackEdit!');
 				removeAlerts();
 			}
@@ -367,12 +369,12 @@ define([
 		// 干掉检测捐赠入口  @by wilee
 		return true;
 
-		if(isOffline) {
+		if (isOffline) {
 			return;
 		}
 		monetize.getPaymentsImmediate(function(err, payments) {
 			removeAlerts();
-			if(!isSponsor(payments)) {
+			if (!isSponsor(payments)) {
 				_.each(document.querySelectorAll('.modal-body'), function(modalBodyElt) {
 					var $elt = $('<div class="alert alert-danger">Please consider <a href="#">sponsoring StackEdit</a> for $5/year (or <a href="#">sign in</a> if you\'re already a sponsor).</div>');
 					$elt.find('a').click(performPayment);
@@ -405,7 +407,7 @@ define([
 			applyTheme(window.theme);
 		}).on('keypress', '.modal', function(e) {
 			// Handle enter key in modals
-			if(e.which == 13 && !$(e.target).is("textarea")) {
+			if (e.which == 13 && !$(e.target).is("textarea")) {
 				$(this).find(".modal-footer a:last").click();
 			}
 		});
@@ -413,14 +415,14 @@ define([
 		// Click events on "insert link" and "insert image" dialog buttons
 		$(".action-insert-link").click(function(e) {
 			var value = utils.getInputTextValue($("#input-insert-link"), e);
-			if(value !== undefined) {
+			if (value !== undefined) {
 				core.insertLinkCallback(value);
 				core.insertLinkCallback = undefined;
 			}
 		});
 		$(".action-insert-image").click(function(e) {
 			var value = utils.getInputTextValue($("#input-insert-image"), e);
-			if(value !== undefined) {
+			if (value !== undefined) {
 				core.insertLinkCallback(value);
 				core.insertLinkCallback = undefined;
 			}
@@ -429,42 +431,47 @@ define([
 		var Uploader;
 		// Hide events on "insert link" and "insert image" dialogs
 		$(".modal-insert-link, .modal-insert-image").on('hidden.bs.modal', function() {
-			if(core.insertLinkCallback !== undefined) {
+			if (core.insertLinkCallback !== undefined) {
 				core.insertLinkCallback(null);
 				core.insertLinkCallback = undefined;
 			}
-		}).on('shown.bs.modal' , function(){
+		}).on('shown.bs.modal', function() {
 			console.log(1111);
-			if(settings.uploadFilePath){
-			    var _setUploadImgbtn = function() {
-			        var uploader = WebUploader.create({
-			            // 选完文件后，是否自动上传。
-			            auto: true,
-			            // 文件接收服务端。
-			            server: settings.uploadFilePath,
-			            // 选择文件的按钮。可选。
-			            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-			            pick: {
-			            	id:'#action-agg-uploadimg',
-			            	innerHTML: '选择文件'
-			            },
-			            // 只允许选择图片文件。
-			            accept: {
-			                title: 'Images',
-			                extensions: 'gif,jpg,jpeg,bmp,png',
-			                mimeTypes: 'image/*'
-			            }
-			        });
-			        uploader.on('uploadSuccess', function(file) {
-			            console.log(file,'uploadSuccess')
-			        });
-			        uploader.on('uploadError', function(file) {
-			        	console.log(file);
-			            eventMgr.onError('上传图片失败，请稍后再试！');
-			        });
-			        return uploader;
-			    }
-			    Uploader = Uploader || _setUploadImgbtn();
+			if (settings.uploadFilePath) {
+				var _setUploadImgbtn = function() {
+					var uploader = WebUploader.create({
+						// 选完文件后，是否自动上传。
+						auto: true,
+						// 文件接收服务端。
+						server: settings.uploadFilePath,
+						// 选择文件的按钮。可选。
+						// 内部根据当前运行是创建，可能是input元素，也可能是flash.
+						pick: {
+							id: '#action-agg-uploadimg',
+							innerHTML: '选择图片'
+						},
+						// 只允许选择图片文件。
+						accept: {
+							title: 'Images',
+							extensions: 'gif,jpg,jpeg,bmp,png',
+							mimeTypes: 'image/*'
+						}
+					});
+					uploader.on('uploadSuccess', function(file, response) {
+						console.log(file, response, 'uploadSuccess');
+						if (response.code == 0) {
+							$('#input-insert-image').val(response.o_pic_url + ' "' + response.name + '"')
+						} else {
+							eventMgr.onError('上传图片失败，请稍后再试！');
+						}
+					});
+					uploader.on('uploadError', function(file, data) {
+						console.log(file);
+						eventMgr.onError('上传图片失败，请稍后再试！');
+					});
+					return uploader;
+				}
+				Uploader = Uploader || _setUploadImgbtn();
 			}
 		});
 
@@ -474,12 +481,12 @@ define([
 		});
 		$(".action-apply-settings").click(function(e) {
 			saveSettings(e);
-			if(!e.isPropagationStopped()) {
+			if (!e.isPropagationStopped()) {
 				window.location.reload();
 			}
 		});
 		$('.action-add-google-drive-account').click(function() {
-			if(settings.gdriveMultiAccount === 3) {
+			if (settings.gdriveMultiAccount === 3) {
 				return;
 			}
 			settings.gdriveMultiAccount++;
@@ -492,9 +499,9 @@ define([
 
 		function applyTheme(theme) {
 			theme = theme || 'default';
-			if(currentTheme != theme) {
+			if (currentTheme != theme) {
 				var themeModule = "less!themes/" + theme;
-				if(window.baseDir.indexOf('-min') !== -1) {
+				if (window.baseDir.indexOf('-min') !== -1) {
 					themeModule = "css!themes/" + theme;
 				}
 				// Undefine the module in RequireJS
@@ -529,14 +536,13 @@ define([
 							// Compare storage version
 							var newVersion = parseInt(newstorage.version.match(/^v(\d+)$/)[1], 10);
 							var currentVersion = parseInt(storage.version.match(/^v(\d+)$/)[1], 10);
-							if(newVersion > currentVersion) {
+							if (newVersion > currentVersion) {
 								// We manage storage upgrade, not downgrade
 								eventMgr.onError("Incompatible version. Please upgrade StackEdit.");
 							} else {
 								$('.modal-import-docs-settings').modal('show');
 							}
-						}
-						catch(exc) {
+						} catch (exc) {
 							eventMgr.onError("Wrong format: " + importedFile.name);
 						}
 						$("#input-file-import-docs-settings").val('');
@@ -549,7 +555,7 @@ define([
 			storage.clear();
 			var allowedKeys = /^file\.|^folder\.|^publish\.|^settings$|^sync\.|^google\.|^author\.|^themeV4$|^version$/;
 			_.each(newstorage, function(value, key) {
-				if(allowedKeys.test(key)) {
+				if (allowedKeys.test(key)) {
 					storage[key] = value;
 				}
 			});
@@ -563,7 +569,7 @@ define([
 		$(".action-default-settings").click(function() {
 			storage.removeItem("settings");
 			storage.removeItem("theme");
-			if(!settings.dropboxFullAccess) {
+			if (!settings.dropboxFullAccess) {
 				storage.removeItem('dropbox.lastChangeId');
 			}
 			window.location.reload();
@@ -603,12 +609,12 @@ define([
 		_.each(document.querySelectorAll('img'), function(imgElt) {
 			var $imgElt = $(imgElt);
 			var src = $imgElt.data('stackeditSrc');
-			if(src) {
+			if (src) {
 				$imgElt.attr('src', window.baseDir + '/img/' + src);
 			}
 		});
 
-		if(window.viewerMode === false) {
+		if (window.viewerMode === false) {
 			// Load theme list
 			var themeOptions = _.reduce(constants.THEME_LIST, function(themeOptions, name, value) {
 				return themeOptions + '<option value="' + value + '">' + name + '</option>';

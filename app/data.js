@@ -148,6 +148,11 @@ var data = {
 	'/agg/doc' : {
 		code :'0',
 		message:'获取文档成功'
+	},
+	'/test' : {
+		code: 0,
+		name: "main_02",
+		o_pic_url: "http://bizfe.meilishuo.com/md-imgs/e36d1984f52f0ae119a486580ba7936c.jpg"
 	}
 }
 exports.data = data;
