@@ -8,7 +8,6 @@ define([
 	"classes/Extension",
 	"settings",
 	"text!html/settingsExtensionsAccordion.html",
-	"extensions/buttonDocSettings",
 	"extensions/yamlFrontMatterParser",
 	"extensions/markdownSectionParser",
 	"extensions/partialRendering",
@@ -45,7 +44,7 @@ define([
 	"extensions/htmlSanitizer",
 	"bootstrap",
 	"bootstrap-datepicker",
-	"extensions/buttonDocSave",
+	"extensions/buttonAggDoc",
 	"jquery-waitforimages"
 ], function($, _, crel, mousetrap, utils, logger, Extension, settings, settingsExtensionsAccordionHTML) {
 

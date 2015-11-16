@@ -40,5 +40,8 @@
   "main": [
     "/public/res/main.js",
     "/public/res/styles/jquery.jgrowl.css"
-  ]
+  ],
+  "devDependencies": {
+    "json-editor": "~0.7.23"
+  }
 }

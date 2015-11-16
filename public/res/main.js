@@ -41,6 +41,7 @@ requirejs.config({
 		'requirejs-text': 'bower-libs/requirejs-text/text',
 		'bootstrap-tour': 'bower-libs/bootstrap-tour/build/js/bootstrap-tour',
 		'bootstrap-datepicker': 'bower-libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min',
+		'JSONEditor' : 'bower-libs/json-editor/dist/jsoneditor',
 		css_browser_selector: 'bower-libs/css_browser_selector/css_browser_selector',
 		'pagedown-extra': 'bower-libs/pagedown-extra/node-pagedown-extra',
 		pagedownExtra: 'bower-libs/pagedown-extra/Markdown.Extra',
@@ -150,6 +151,9 @@ requirejs.config({
 				'bootstrap'
 			],
 			exports: 'Datetimepicker'
+		},
+		'JSONEditor': {
+			exports: 'JSONEditor'
 		},
 		bootstrap: [
 			'jquery'
