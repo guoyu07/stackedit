@@ -40,6 +40,14 @@ define([
 				storage[this.fileIndex + ".fileType"] = fileType;
 			}
 		});
+		Object.defineProperty(this, '_id', {
+			get: function() {
+				return storage[this.fileIndex + "._id"];
+			},
+			set: function(_id) {
+				storage[this.fileIndex + "._id"] = _id;
+			}
+		});
 		Object.defineProperty(this, 'aggName', {
 			get: function() {
 				return storage[this.fileIndex + ".aggName"];

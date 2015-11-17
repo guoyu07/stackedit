@@ -51,7 +51,7 @@ define([
 	};
 
 	fileMgr.createFile = function(title, content, discussionListJSON, syncLocations, isTemporary) {
-		var fileType = 'local', currentFile, aggName;
+		var fileType = 'local', currentFile, aggName, fileTitle;
 		if( typeof title == 'object' ){
 			fileType 	= title.fileType;
 			fileTitle 	= title.title;

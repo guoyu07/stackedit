@@ -317,12 +317,12 @@ define([
 		// Create extension menu buttons
 		logger.log("onCreateMenuButton");
 		var onCreateMenuButtonListenerList = getExtensionListenerList("onCreateMenuButton");
-		var extensionPreviewButtonsFragment = document.createDocumentFragment();
+		var extensionMenuButtonsFragment = document.createDocumentFragment();
 		_.each(onCreateMenuButtonListenerList, function(listener) {
-			extensionPreviewButtonsFragment.appendChild(listener());
+			extensionMenuButtonsFragment.appendChild(listener());
 		});
-		var previewButtonsElt = document.querySelector('.extension-menu-buttons');
-		previewButtonsElt && previewButtonsElt.appendChild(extensionPreviewButtonsFragment);
+		var menuButtonsElt = document.querySelector('.extension-menu-buttons');
+		menuButtonsElt && menuButtonsElt.appendChild(extensionMenuButtonsFragment);
 
 		// Shall close every popover
 		mousetrap.bind('escape', function() {

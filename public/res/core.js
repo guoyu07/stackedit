@@ -367,9 +367,8 @@ define([
 
 	var checkPayment = _.debounce(function() {
 		// 干掉检测捐赠入口  @by wilee
-		return true;
 
-		if (isOffline) {
+		if (1 || isOffline) {
 			return;
 		}
 		monetize.getPaymentsImmediate(function(err, payments) {
@@ -459,18 +458,18 @@ define([
 					});
 					uploader.on('uploadSuccess', function(file, response) {
 						console.log(file, response, 'uploadSuccess');
-						if (response.code == 0) {
-							$('#input-insert-image').val(response.o_pic_url + ' "' + response.name + '"')
+						if (response.code === 0) {
+							$('#input-insert-image').val(response.o_pic_url + ' "' + response.name + '"');
 						} else {
 							eventMgr.onError('上传图片失败，请稍后再试！');
 						}
 					});
-					uploader.on('uploadError', function(file, data) {
+					uploader.on('uploadError', function(file) {
 						console.log(file);
 						eventMgr.onError('上传图片失败，请稍后再试！');
 					});
 					return uploader;
-				}
+				};
 				Uploader = Uploader || _setUploadImgbtn();
 			}
 		});
