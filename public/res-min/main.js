@@ -13891,6 +13891,13 @@ function() {
    set: function(e) {
     n[this.fileIndex + ".fileType"] = e;
    }
+  }), Object.defineProperty(this, "_id", {
+   get: function() {
+    return n[this.fileIndex + "._id"];
+   },
+   set: function(e) {
+    n[this.fileIndex + "._id"] = e;
+   }
   }), Object.defineProperty(this, "aggName", {
    get: function() {
     return n[this.fileIndex + ".aggName"];
@@ -21730,84 +21737,115 @@ function() {
 }), define("text!html/buttonAggDocSettings.html", [], function() {
  return '<div class="menu-panel-docsettings">\n	<a href="#" class="list-group-item" data-toggle="modal" data-target=".modal-docsettings-agg">\n		<div><i class="icon-folder-open"></i> Agg Settings</div>\n		<small>Document Aggregate Settings</small>\n	</a>\n	<a href="#" class="list-group-item" data-toggle="modal" data-target=".modal-docsettings-bbox">\n		<div><i class="icon-music"></i> Bbox Settings</div>\n		<small>Bbox Document Settings</small>\n	</a>\n</div>\n';
 }), define("extensions/buttonAggDoc", [ "jquery", "underscore", "storage", "classes/Extension", "text!html/buttonAggDocSave.html", "text!html/buttonAggDocSettings.html", "fileSystem" ], function(e, t, n, i, r, o, a) {
- var s, l, c, u, d, h, p = function(n, i) {
-  i = i || function() {
-   h.onMessage("\u66f4\u65b0\u6587\u6863\u6210\u529f\uff01");
-  }, window.Meilishuo && window.Meilishuo.constant && window.Meilishuo.constant.docInfoSubmit && t.extend(n, window.Meilishuo.constant.docInfoSubmit), 
-  e.post("/data/agg/docedit", n, function(e) {
-   0 === e.code && i();
+ var s, l, c, u, d, h = {}, p = new i("buttonAggDoc", "Save Document", !0, !0), f = function(e) {
+  return {
+   _id: e._id || "",
+   title: e.title || "",
+   creator: e.creator || s.name,
+   aggName: e.category || "",
+   content: e.mdContent || "",
+   updateTime: e.updateTime || ""
+  };
+ }, m = function(t, n) {
+  n = n || function(e) {
+   console.log(">>>\u66f4\u65b0\u6587\u6863\u7ed3\u679c", e), y.onMessage("\u66f4\u65b0\u6587\u6863\u6210\u529f\uff01");
+  };
+  var i = {
+   _id: h._id || "",
+   title: h.title,
+   category: h.aggName,
+   creator: h.creator,
+   mdContent: t.content,
+   htmlContent: C
+  }, r = "/aj/agg/newdoc";
+  i._id && (r = "/aj/agg/editdoc"), e.post(r, i, function(e) {
+   0 === e.code && n(e);
   }, "JSON");
- }, f = function() {
-  if (window.Meilishuo && window.Meilishuo.constant && window.Meilishuo.constant.docInfo) {
-   var e, n = window.Meilishuo.constant.docInfo, i = t.filter(a, function(e) {
-    return "agg" == e.fileType && e.aggName == n.aggName && e.title == n.title;
-   }), r = function() {
+ }, g = function(t, n) {
+  t.aggName && t.title && (console.log(">>>\u901a\u8fc7aggName , title\u83b7\u53d6\u6587\u6863:", t), 
+  n = n || function(e) {
+   h = f(e);
+  }, e.get("/aj/agg/getdoc", {
+   doc: t.aggName + "/" + t.title
+  }, function(e) {
+   console.log(">>>\u901a\u8fc7aggName , title\u83b7\u53d6\u6587\u6863\u6210\u529f:", e), 
+   n(e);
+  }, "JSON"));
+ }, v = function() {
+  if (h) {
+   console.log(">>>\u901a\u8fc7\u9ed8\u8ba4\u6570\u636e\u6253\u5f00\u672c\u5730\u6587\u6863:", h);
+   var e, n = t.filter(a, function(e) {
+    return e.aggName == h.aggName && e.title == h.title ? !0 : void 0;
+   }), i = function() {
     setTimeout(function() {
-     e = g.createFile({
+     e = x.createFile({
       fileType: "agg",
-      title: n.title,
-      aggName: n.aggName,
-      content: n.mdContent
-     }), g.selectFile(e);
+      title: h.title,
+      _id: h._id,
+      aggName: h.aggName,
+      content: h.mdContent
+     }), x.selectFile(e);
     }, 400);
    };
-   1 === i.length ? g.selectFile(i[0]) : 0 === i.length ? r() : g.onError("aggName\u4e3a" + n.aggName + "\uff0c\u4e14docTitle\u4e3a" + n.title + "\u7684\u6587\u6863\u6709" + i.length + "\u4e2a\uff0c\u8bf7\u5220\u9664\u540e\u518d\u8bd5");
+   1 === n.length ? (console.log(">>>\u6709\u5339\u914d\u5230\u7684\u7f13\u5b58\u6587\u6863\uff0c\u76f4\u63a5\u9009\u4e2d\u6587\u6863:", h), 
+   x.selectFile(n[0])) : 0 === n.length ? (console.log(">>>\u6ca1\u6709\u5339\u914d\u5230\u7684\u7f13\u5b58\u6587\u6863\uff0c\u901a\u8fc7\u9ed8\u8ba4\u6570\u636e\u521b\u5efa\u6587\u6863:", h), 
+   i()) : y.onError("aggName\u4e3a" + h.aggName + "\uff0c\u4e14docTitle\u4e3a" + h.title + "\u7684\u6587\u6863\u6709" + n.length + "\u4e2a\uff0c\u8bf7\u5220\u9664\u540e\u518d\u8bd5");
   }
- }, m = new i("buttonAggDoc", "Save Document", !0, !0);
- m.onEventMgrCreated = function(e) {
-  h = e;
- };
- var g;
- m.onFileMgrCreated = function(e) {
-  g = e;
- };
- var v, b;
- m.onPreviewFinished = function(e, t) {
-  v = e, b = t;
- }, m.onCreateButton = function() {
-  return r;
- }, m.onCreateMenuButton = function() {
-  return e(o)[0];
- };
- var y;
- return m.onFileSelected = function(t) {
-  y = t, "agg" == t.fileType ? (e(".action-button-docsave").show(), e(".menu-panel-docsettings").show()) : (e(".action-button-docsave").hide(), 
-  e(".menu-panel-docsettings").hide());
- }, m.onFileCreated = function(t, n) {
+ }, b = function(t, n) {
   if (!n.aggName) {
    var i = function(e) {
     var t = e.length, i = "";
-    if (t) {
-     d = e;
+    if (!(1 > t)) {
      for (var r = 0; t > r; r++) i += '<option value="' + e[r].name + '">' + e[r].title + "</option>";
-     s.html(i), n.currentFile.aggName && s.val(n.currentFile.aggName);
+     l.html(i), n.currentFile && n.currentFile.aggName && l.val(n.currentFile.aggName);
     }
    };
-   "agg" == t.fileType && (u.modal(), e.get("/data/agg/list", function(e) {
+   "agg" == t.fileType && (d.modal(), e.get("/aj/agg/list", function(e) {
     i(e);
    }, "JSON"));
   }
- }, m.onReady = function() {
-  s = e("#createDocAggName"), l = e("#createDocAggDocTitle"), c = e(".file-title-navbar"), 
-  u = e(".modal-docnew-agginfo"), e(".action-button-docsave").on("click", function() {
-   var e = {
-    title: y.title,
-    category: y.aggName,
-    mdContent: y.content,
-    htmlContent: b
-   };
-   p(e);
+ };
+ window.Meilishuo && window.Meilishuo.constant && window.Meilishuo.constant && (h = f(window.Meilishuo.constant.docInfo), 
+ s = window.Meilishuo.constant.userInfo);
+ var y;
+ p.onEventMgrCreated = function(e) {
+  y = e;
+ };
+ var x;
+ p.onFileMgrCreated = function(e) {
+  x = e;
+ };
+ var w, C;
+ p.onPreviewFinished = function(e, t) {
+  w = e, C = t;
+ }, p.onCreateButton = function() {
+  return r;
+ }, p.onCreateMenuButton = function() {
+  return e(o)[0];
+ };
+ var S;
+ return p.onFileSelected = function(t) {
+  S = t, "agg" == t.fileType ? (e(".action-button-docsave").show(), e(".menu-panel-docsettings").show()) : (e(".action-button-docsave").hide(), 
+  e(".menu-panel-docsettings").hide()), g(t);
+ }, p.onFileCreated = function(e, t) {
+  b(e, t);
+ }, p.onReady = function() {
+  l = e("#createDocAggName"), c = e("#createDocAggDocTitle"), u = e(".file-title-navbar"), 
+  d = e(".modal-docnew-agginfo"), e(".action-button-docsave").on("click", function() {
+   m(S);
   }), e(".form-control-bbox-otime").datepicker().on("changeDate", function() {
    e(this).datepicker("hide");
   }), e("#createDocAggForm").on("submit", function() {
-   return y.aggName = s.val(), y.title = l.val(), h.onTitleChanged(y), u.modal("hide"), 
-   !1;
-  }), u.on("hidden.bs.modal", function() {
-   "agg" != y.fileType || y.aggName || g.deleteFile(y);
-  }), u.on("shown.bs.modal", function() {
-   l.focus();
-  }), s.on("change", function() {}), f();
- }, m;
+   return S.aggName = l.val(), S.title = c.val(), y.onTitleChanged(S), d.modal("hide"), 
+   g(S, function(e) {
+    h.content ? window.location.href = "/agg/doc?name=" + h.aggName + "&doc=" + h.aggName + "/" + h.title : h = f(e);
+   }), !1;
+  }), d.on("hidden.bs.modal", function() {
+   "agg" != S.fileType || S.aggName || x.deleteFile(S);
+  }), d.on("shown.bs.modal", function() {
+   c.focus();
+  }), l.on("change", function() {}), v();
+ }, p;
 }), function(e) {
  var t = "waitForImages";
  e.waitForImages = {
@@ -27569,28 +27607,29 @@ this.DIFF_EQUAL = DIFF_EQUAL, define("diff_match_patch_uncompressed", function(e
   s.onFileSelected(r), e(".action-edit-document").toggleClass("hide", r.fileIndex != n.TEMPORARY_FILE_INDEX)), 
   i.initEditor(r);
  }, d.createFile = function(e, i, u, d, h) {
-  var p, f, m, g = "local";
-  if ("object" == typeof e && (g = e.fileType, m = e.title, i = e.content, f = e.aggName, 
-  p = e.currentFile, e = m), i = void 0 !== i ? i : a.defaultContent, !e) {
+  var p, f, m, g, v = "local";
+  if ("object" == typeof e && (g = e._id, v = e.fileType, m = e.title, i = e.content, 
+  f = e.aggName, p = e.currentFile, e = m), i = void 0 !== i ? i : a.defaultContent, 
+  !e) {
    e = n.DEFAULT_FILE_TITLE;
-   for (var v = 2, b = function(t) {
+   for (var b = 2, y = function(t) {
     return t.title == e;
-   }; t.some(l, b); ) e = n.DEFAULT_FILE_TITLE + v++;
+   }; t.some(l, y); ) e = n.DEFAULT_FILE_TITLE + b++;
   }
-  var y = n.TEMPORARY_FILE_INDEX;
-  if (!h) do y = "file." + r.id(); while (t.has(l, y));
+  var x = n.TEMPORARY_FILE_INDEX;
+  if (!h) do x = "file." + r.id(); while (t.has(l, x));
   d = d || {};
-  var x = t.reduce(d, function(e, t) {
+  var w = t.reduce(d, function(e, t) {
    return r.storeAttributes(t), e + t.syncIndex + ";";
   }, ";");
-  o[y + ".title"] = e, o[y + ".content"] = i, o[y + ".sync"] = x, o[y + ".publish"] = ";", 
-  o[y + ".fileType"] = g, o[y + ".aggName"] = f || "";
-  var w = new c(y, e, d);
-  return u && (w.discussionListJSON = u), h || (r.appendIndexToArray("file.list", y), 
-  l[y] = w, s.onFileCreated(w, {
+  o[x + ".title"] = e, o[x + ".content"] = i, o[x + ".sync"] = w, o[x + ".publish"] = ";", 
+  o[x + "._id"] = g || "", o[x + ".aggName"] = f || "", o[x + ".fileType"] = v;
+  var C = new c(x, e, d);
+  return u && (C.discussionListJSON = u), h || (r.appendIndexToArray("file.list", x), 
+  l[x] = C, s.onFileCreated(C, {
    aggName: f,
    currentFile: p
-  })), w;
+  })), C;
  }, d.deleteFile = function(e) {
   e = e || d.currentFile, e.folder && (e.folder.removeFile(e), s.onFoldersChanged()), 
   r.removeIndexFromArray("file.list", e.fileIndex), delete l[e.fileIndex], d.currentFile === e && (d.currentFile = void 0, 

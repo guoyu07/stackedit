@@ -21,13 +21,12 @@ define([
 	fileMgr.selectFile = function(fileDesc) {
 		fileDesc = fileDesc || fileMgr.currentFile;
 
-		if(fileDesc === undefined) {
+		if (fileDesc === undefined) {
 			var fileSystemSize = _.size(fileSystem);
-			if(fileSystemSize === 0) {
+			if (fileSystemSize === 0) {
 				// If fileSystem empty create one file
 				fileDesc = fileMgr.createFile(constants.WELCOME_DOCUMENT_TITLE, welcomeContent);
-			}
-			else {
+			} else {
 				// Select the last selected file
 				fileDesc = _.max(fileSystem, function(fileDesc) {
 					return fileDesc.selectTime || 0;
@@ -35,7 +34,7 @@ define([
 			}
 		}
 
-		if(fileMgr.currentFile !== fileDesc) {
+		if (fileMgr.currentFile !== fileDesc) {
 			fileMgr.currentFile = fileDesc;
 			fileDesc.selectTime = new Date().getTime();
 
@@ -51,12 +50,14 @@ define([
 	};
 
 	fileMgr.createFile = function(title, content, discussionListJSON, syncLocations, isTemporary) {
-		var fileType = 'local', currentFile, aggName, fileTitle;
-		if( typeof title == 'object' ){
-			fileType 	= title.fileType;
-			fileTitle 	= title.title;
-			content 	= title.content;
-			aggName 	= title.aggName;
+		var fileType = 'local',
+			currentFile, aggName, fileTitle, _id;
+		if (typeof title == 'object') {
+			_id = title._id;
+			fileType = title.fileType;
+			fileTitle = title.title;
+			content = title.content;
+			aggName = title.aggName;
 			currentFile = title.currentFile;
 
 			title = fileTitle;
@@ -64,24 +65,24 @@ define([
 
 		content = content !== undefined ? content : settings.defaultContent;
 
-		if(!title) {
+		if (!title) {
 			// Create a file title
 			title = constants.DEFAULT_FILE_TITLE;
 			var indicator = 2;
 			var checkTitle = function(fileDesc) {
 				return fileDesc.title == title;
 			};
-			while(_.some(fileSystem, checkTitle)) {
+			while (_.some(fileSystem, checkTitle)) {
 				title = constants.DEFAULT_FILE_TITLE + indicator++;
 			}
 		}
 
 		// Generate a unique fileIndex
 		var fileIndex = constants.TEMPORARY_FILE_INDEX;
-		if(!isTemporary) {
+		if (!isTemporary) {
 			do {
 				fileIndex = "file." + utils.id();
-			} while(_.has(fileSystem, fileIndex));
+			} while (_.has(fileSystem, fileIndex));
 		}
 
 		// syncIndex associations
@@ -95,20 +96,21 @@ define([
 		storage[fileIndex + ".content"] = content;
 		storage[fileIndex + ".sync"] = sync;
 		storage[fileIndex + ".publish"] = ";";
-		storage[fileIndex + ".fileType"] = fileType;
+		storage[fileIndex + "._id"] = _id || "";
 		storage[fileIndex + ".aggName"] = aggName || "";
+		storage[fileIndex + ".fileType"] = fileType;
 
 		// Create the file descriptor
 		var fileDesc = new FileDescriptor(fileIndex, title, syncLocations);
 		discussionListJSON && (fileDesc.discussionListJSON = discussionListJSON);
 
 		// Add the index to the file list
-		if(!isTemporary) {
+		if (!isTemporary) {
 			utils.appendIndexToArray("file.list", fileIndex);
 			fileSystem[fileIndex] = fileDesc;
-			eventMgr.onFileCreated(fileDesc,{
-				aggName:aggName,
-				currentFile:currentFile
+			eventMgr.onFileCreated(fileDesc, {
+				aggName: aggName,
+				currentFile: currentFile
 			});
 		}
 		return fileDesc;
@@ -118,7 +120,7 @@ define([
 		fileDesc = fileDesc || fileMgr.currentFile;
 
 		// Unassociate file from folder
-		if(fileDesc.folder) {
+		if (fileDesc.folder) {
 			fileDesc.folder.removeFile(fileDesc);
 			eventMgr.onFoldersChanged();
 		}
@@ -129,7 +131,7 @@ define([
 
 		// Don't bother with fields in localStorage, they will be removed on next page load
 
-		if(fileMgr.currentFile === fileDesc) {
+		if (fileMgr.currentFile === fileDesc) {
 			// Unset the current fileDesc
 			fileMgr.currentFile = undefined;
 			// Refresh the editor with another file
@@ -159,11 +161,11 @@ define([
 
 		var $fileTitleElt = $('.file-title-navbar');
 		var $fileTitleInputElt = $(".input-file-title");
-		$(".action-create-agg-file").click(function() {
+/*		$(".action-create-agg-file").click(function() {
 			setTimeout(function() {
 				var fileDesc = fileMgr.createFile({
-					fileType : 'agg',
-					currentFile : fileMgr.currentFile
+					fileType: 'agg',
+					currentFile: fileMgr.currentFile
 				});
 				fileMgr.selectFile(fileDesc);
 				$fileTitleElt.click();
@@ -181,10 +183,10 @@ define([
 		});
 		$(".action-remove-file").click(function() {
 			fileMgr.deleteFile();
-		});
+		});*/
 		var titleEditing;
 		$fileTitleElt.click(function() {
-			if(window.viewerMode === true) {
+			if (window.viewerMode === true) {
 				return;
 			}
 			$fileTitleElt.addClass('hide');
@@ -194,15 +196,16 @@ define([
 				fileTitleInput.focus().get(0).select();
 			}, 10);
 		});
+
 		function applyTitle() {
-			if(!titleEditing) {
+			if (!titleEditing) {
 				return;
 			}
 			$fileTitleInputElt.addClass('hide');
 			$fileTitleElt.removeClass('hide');
 			var title = $.trim($fileTitleInputElt.val());
 			var fileDesc = fileMgr.currentFile;
-			if(title && title != fileDesc.title) {
+			if (title && title != fileDesc.title) {
 				fileDesc.title = title;
 				eventMgr.onTitleChanged(fileDesc);
 			}
@@ -216,11 +219,11 @@ define([
 				applyTitle();
 			}, 0);
 		}).keypress(function(e) {
-			if(e.keyCode == 13) {
+			if (e.keyCode == 13) {
 				applyTitle();
 				e.preventDefault();
 			}
-			if(e.keyCode == 27) {
+			if (e.keyCode == 27) {
 				$fileTitleInputElt.val("");
 				applyTitle();
 			}

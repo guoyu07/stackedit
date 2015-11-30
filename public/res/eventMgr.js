@@ -20,9 +20,9 @@ define([
 	"extensions/dialogManageSharing",
 	"extensions/dialogOpenHarddrive",
 	"extensions/documentTitle",
-	"extensions/documentSelector",
-	"extensions/documentPanel",
-	"extensions/documentManager",
+	//"extensions/documentSelector",干掉原有的documentManager功能 @by wilee
+	//"extensions/documentPanel", 干掉原有的documentManager功能 @by wilee
+	//"extensions/documentManager", 干掉原有的documentManager功能 @by wilee
 	"extensions/workingIndicator",
 	"extensions/notifications",
 	"extensions/umlDiagrams",
