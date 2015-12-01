@@ -54,7 +54,7 @@
 @jgrowl-bg-color: fade(@modal-backdrop-bg, 90%);
 
 /* Sizes */
-@title-max-width: 400px;
+@title-max-width: 300px;
 @menu-panel-width: 280px;
 @document-panel-width: 320px;
 @jgrowl-width: 240px;
@@ -478,6 +478,9 @@ a {
 		height: @input-height-slim;
 		& > li {
 			display: inline-block;
+			& > a{
+				display: inline-block;
+			}
 		}
 		// Dropdown submenu
 		&.pull-right {

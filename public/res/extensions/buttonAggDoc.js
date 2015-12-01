@@ -10,7 +10,7 @@ define([
     var _defaultDocInfo = {},_defaultUserInfo;
 
     var buttonAggDoc = new Extension("buttonAggDoc", 'Save Document', true, true);
-    var $createDocAggName, $createDocAggDocTitle, $fileTitleNavbar;
+    var $createDocAggName, $createDocAggDocTitle, $fileTitleNavbar, $documentList, $fileAggnameNavbar;
 
     var _formatDoc = function(data) {
         return {
@@ -29,7 +29,7 @@ define([
         var documentEltTmpl = [
             '<li><a',
             ' class="list-group-item<%= fileDesc._id === selectedId ? " active" : "" %>"',
-            ' href="/<%= fileDesc.aggName + "/" + fileDesc.title %>">',
+            ' href="/agg/doc?name=<%= fileDesc.aggName %>&doc=<%= fileDesc.aggName + "/" + fileDesc.title %>">',
             '   <%= fileDesc.aggName + "/" + fileDesc.composeTitle() %>',
             '</a></li>',
         ].join('');
@@ -41,7 +41,7 @@ define([
             }
         });
 
-        _.forEach(aggDocList, function(item, index){
+        _.forEach(aggDocList, function(item){
             aggDocListHTML += _.template(documentEltTmpl, {
                 fileDesc: item,
                 selectedId: _defaultDocInfo._id
@@ -52,7 +52,7 @@ define([
         aggDocListHTML  = '<ul class="nav">' + aggDocListHTML + '</ul>';
 
         return aggDocListHTML;
-    }
+    };
 
     /*
      * 提交文档
@@ -80,7 +80,7 @@ define([
         }
 
         $.post(postUrl, postData, function(res) {
-            if (res.code === 0) {
+            if (res.code === "0") {
                 callback(res);
             }
         }, 'JSON');
@@ -102,7 +102,7 @@ define([
         // 如果本地有对应id的文档就更新文档内容后，选择本地文档
         if(aggDocList.length > 0){
             aggDocList[0].content = _defaultDocInfo.content;
-            fileMgr.selectFile()
+            fileMgr.selectFile(aggDocList[0]);
         }else{
             setTimeout(function() {
                 // 创建文件
@@ -116,7 +116,7 @@ define([
 
                 fileMgr.selectFile(curFileDesc);
             }, 400);
-        };
+        }
     };
 
     if (window.Meilishuo && window.Meilishuo.constant && window.Meilishuo.constant) {
@@ -151,6 +151,14 @@ define([
     var selectedFileDesc;
     buttonAggDoc.onFileSelected = function(fileDesc) {
         selectedFileDesc = fileDesc;
+
+        if (fileDesc.fileType == 'agg') {
+            $('.action-button-docsave').show();
+            $('.menu-panel-docsettings').show();
+        } else {
+            $('.action-button-docsave').hide();
+            $('.menu-panel-docsettings').hide();
+        }
     };
 
     buttonAggDoc.onReady = function() {
@@ -158,6 +166,7 @@ define([
         $createDocAggDocTitle = $('#createDocAggDocTitle');
         $fileTitleNavbar = $(".file-title-navbar");
         $documentList = $('.document-list');
+        $fileAggnameNavbar = $('.agg-name-navbar');
 
         $('.action-button-docsave').on('click', function() {
             _submitDoc(selectedFileDesc);
@@ -168,7 +177,10 @@ define([
                 $(this).datepicker('hide');
             });
 
-        $documentList.html(_getDocumentList())
+        $documentList.html(_getDocumentList());
+
+        $fileAggnameNavbar.text(_defaultDocInfo.aggName).attr({href:'/agg?name='+_defaultDocInfo.aggName+'&doc='+_defaultDocInfo.aggName+'/'+_defaultDocInfo.title});
+
         // 打开默认文档
         _openDefaultDoc();
     };
