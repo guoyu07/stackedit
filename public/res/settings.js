@@ -28,8 +28,8 @@ define([
 			'<meta name="viewport" content="width=device-width, initial-scale=1.0">',
 			'<title><%= documentTitle %></title>',
 			'<link rel="stylesheet" href="' + constants.MAIN_URL + 'res-min/themes/base.css" />',
-			'<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>',
-			'</head>',
+			/*'<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>',
+			'</head>',*/
 			'<body><div class="container"><%= documentHTML %></div></body>',
 			'</html>'
 		].join('\n'),
@@ -43,8 +43,8 @@ define([
 			'<script type="text/x-mathjax-config">',
 			'MathJax.Hub.Config({ messageStyle: "none" });',
 			'</script>',
-			'<script type="text/javascript" src="http://localhost/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS_HTML"></script>',
-			'</head>',
+			/*'<script type="text/javascript" src="http://localhost/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS_HTML"></script>',
+			'</head>',*/
 			'<body><%= documentHTML %></body>',
 			'</html>'
 		].join('\n'),

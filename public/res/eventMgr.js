@@ -28,14 +28,14 @@ define([
 	"extensions/umlDiagrams",
 	"extensions/markdownExtra",
 	"extensions/toc",
-	"extensions/mathJax",
+	//"extensions/mathJax", 干掉数学公式编辑器
 	"extensions/emailConverter",
 	"extensions/scrollSync",
 	// "extensions/buttonSync", 干掉同步入口 @by wilee
 	// "extensions/buttonPublish", 干掉上传入口 @by wilee
 	"extensions/buttonStat",
 	"extensions/buttonHtmlCode",
-	"extensions/buttonViewer",
+	// "extensions/buttonViewer", 干掉右下角的查看文档入口 @by wilee
 	// "extensions/welcomeTour", 干掉用户引导 @by wilee
 	"extensions/shortcuts",
 	"extensions/userCustom",

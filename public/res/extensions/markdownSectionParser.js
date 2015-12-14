@@ -1,11 +1,11 @@
 define([
     "underscore",
     "extensions/markdownExtra",
-    "extensions/mathJax",
+    //"extensions/mathJax", 干掉数学公式编辑器
     "extensions/partialRendering",
     "classes/Extension",
     "crel",
-], function(_, markdownExtra, mathJax, partialRendering, Extension, crel) {
+], function(_, markdownExtra, /*mathJax, */partialRendering, Extension, crel) {
 
     var markdownSectionParser = new Extension("markdownSectionParser", "Markdown section parser");
 
@@ -27,7 +27,8 @@ define([
                 regexp = '^```[^`\\n]*\\n[\\s\\S]*?\\n```|' + regexp; // Fenced block delimiters
             }
         }
-        if(mathJax.enabled) {
+        //if(mathJax.enabled) {
+        if(false) {
             // Math delimiter has to follow 1 empty line to be considered as a section delimiter
             regexp = '^[ \\t]*\\n\\$\\$[\\s\\S]*?\\$\\$|' + regexp; // $$ math block delimiters
             regexp = '^[ \\t]*\\n\\\\\\\\[[\\s\\S]*?\\\\\\\\]|' + regexp; // \\[ \\] math block delimiters

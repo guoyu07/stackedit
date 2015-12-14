@@ -36,7 +36,7 @@ define([
 
         aggDocList = _.filter(fileSystem, function(fileDesc) {
             // 缓存文件和默认文件的aggName、title、_id完全一致
-            if (fileDesc.aggName && fileDesc.title && fileDesc._id ) {
+            if (fileDesc.fileType == 'agg' ) {
                 return true;
             }
         });
@@ -65,7 +65,7 @@ define([
 
         // 生成基本数据
         var postData = {
-            _id         : _defaultDocInfo._id || '',
+            _id         : _defaultDocInfo._id || undefined,
             title       : _defaultDocInfo.title,
             category    : _defaultDocInfo.aggName,
             creator     : _defaultDocInfo.creator,
@@ -74,9 +74,11 @@ define([
             htmlContent : htmlWithoutComments // 文档html格式内容
         };
 
-        var postUrl = '/aj/agg/newdoc';
+        var postUrl;
         if (postData._id) {
             postUrl = '/aj/agg/editdoc';
+        }else{
+            postUrl = '/aj/agg/newdoc';
         }
 
         $.post(postUrl, postData, function(res) {
@@ -94,14 +96,16 @@ define([
         
         aggDocList = _.filter(fileSystem, function(fileDesc) {
             // 查看文件缓存中是否存在_id一致的文档
-            if (fileDesc._id == _defaultDocInfo._id ) {
+            if ( fileDesc.fileType == 'agg' && fileDesc._id == _defaultDocInfo._id ) {
                 return true;
             }
         });
 
         // 如果本地有对应id的文档就更新文档内容后，选择本地文档
         if(aggDocList.length > 0){
-            aggDocList[0].content = _defaultDocInfo.content;
+            aggDocList[0].content = _defaultDocInfo.content || aggDocList[0].content;
+            aggDocList[0].title = _defaultDocInfo.title;
+
             fileMgr.selectFile(aggDocList[0]);
         }else{
             setTimeout(function() {
@@ -115,13 +119,13 @@ define([
                 });
 
                 fileMgr.selectFile(curFileDesc);
-            }, 400);
+            }, 100);
         }
     };
 
     if (window.Meilishuo && window.Meilishuo.constant && window.Meilishuo.constant) {
-        _defaultDocInfo = _formatDoc(window.Meilishuo.constant.docInfo);
-        _defaultUserInfo = window.Meilishuo.constant.userInfo;
+        _defaultUserInfo = window.Meilishuo.constant.userInfo || {};
+        _defaultDocInfo = _formatDoc(window.Meilishuo.constant.docInfo||{});
     }
 
     var eventMgr;
@@ -177,12 +181,17 @@ define([
                 $(this).datepicker('hide');
             });
 
-        $documentList.html(_getDocumentList());
-
+        // 更新导航栏聚合页连接
         $fileAggnameNavbar.text(_defaultDocInfo.aggName).attr({href:'/agg?name='+_defaultDocInfo.aggName+'&doc='+_defaultDocInfo.aggName+'/'+_defaultDocInfo.title});
 
         // 打开默认文档
         _openDefaultDoc();
+
+        // 更新历史文档列表
+        // 首先生成文档，然后再生成历史文档列表，所以延时400ms
+        setTimeout(function(){
+            $documentList.html(_getDocumentList());
+        },400);
     };
 
 

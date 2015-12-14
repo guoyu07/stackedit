@@ -435,12 +435,13 @@ define([
 				core.insertLinkCallback = undefined;
 			}
 		}).on('shown.bs.modal', function() {
-			console.log(1111);
 			if (settings.uploadFilePath) {
 				var _setUploadImgbtn = function() {
 					var uploader = WebUploader.create({
 						// 选完文件后，是否自动上传。
 						auto: true,
+						// 上传文件字段名
+						fileVal:'attach',
 						// 文件接收服务端。
 						server: settings.uploadFilePath,
 						// 选择文件的按钮。可选。
@@ -455,6 +456,11 @@ define([
 							extensions: 'gif,jpg,jpeg,bmp,png',
 							mimeTypes: 'image/*'
 						}
+					});
+					uploader.on('uploadBeforeSend', function(file, data){
+						data.fileIndex = 0;
+						data.fileName = data.name;
+						data.fileCount = 1;
 					});
 					uploader.on('uploadSuccess', function(file, response) {
 						console.log(file, response, 'uploadSuccess');
