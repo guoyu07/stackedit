@@ -21270,18 +21270,20 @@ function() {
   }), n = '<ul class="nav">' + n + "</ul>";
  }, v = function(t, n) {
   n = n || function(e) {
-   console.log(">>>\u66f4\u65b0\u6587\u6863\u7ed3\u679c", e), y.onMessage("\u66f4\u65b0\u6587\u6863\u6210\u529f\uff01");
+   console.log(">>>\u66f4\u65b0\u6587\u6863\u7ed3\u679c", e), h.updateTime = e.data.updateTime, 
+   y.onMessage("\u66f4\u65b0\u6587\u6863\u6210\u529f\uff01");
   };
   var i, r = {
    _id: h._id || void 0,
    title: h.title,
    category: h.aggName,
    creator: h.creator,
+   curUpdateTime: h.updateTime,
    mdContent: t.content,
    htmlContent: C
   };
   i = r._id ? "/aj/agg/editdoc" : "/aj/agg/newdoc", e.post(i, r, function(e) {
-   "0" === e.code && n(e);
+   "0" === e.code ? n(e) : y.onError(e.msg || "\u66f4\u65b0\u6587\u6863\u51fa\u9519\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5\u3002");
   }, "JSON");
  }, b = function() {
   var e, n;
@@ -21317,7 +21319,7 @@ function() {
   return e(o)[0];
  };
  var S;
- return f.onFileSelected = function(t) {
+ f.onFileSelected = function(t) {
   S = t, "agg" == t.fileType ? (e(".action-button-docsave").show(), e(".menu-panel-docsettings").show()) : (e(".action-button-docsave").hide(), 
   e(".menu-panel-docsettings").hide());
  }, f.onReady = function() {
@@ -21331,6 +21333,12 @@ function() {
   }), b(), setTimeout(function() {
    d.html(g());
   }, 400);
+ };
+ var _ = !1;
+ return f.onContentChanged = function() {
+  _ = !0;
+ }, window.onbeforeunload = function(e) {
+  e = e || window.event, _ && (e.returnValue = "\u4eb2\uff01\u79bb\u5f00\u524d\u522b\u5fd8\u4e86\u4fdd\u5b58\u6587\u7ae0\u54e6\uff01");
  }, f;
 }), function(e) {
  var t = "waitForImages";

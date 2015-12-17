@@ -60,6 +60,8 @@ define([
     var _submitDoc = function(fileDesc, callback) {
         callback = callback || function(res) {
             console.log('>>>更新文档结果', res);
+            // 更新当前提交时间
+            _defaultDocInfo.updateTime = res.data.updateTime;
             eventMgr.onMessage('更新文档成功！');
         };
 
@@ -69,6 +71,7 @@ define([
             title       : _defaultDocInfo.title,
             category    : _defaultDocInfo.aggName,
             creator     : _defaultDocInfo.creator,
+            curUpdateTime   : _defaultDocInfo.updateTime,
 
             mdContent   : fileDesc.content, // 文档markdown格式内容
             htmlContent : htmlWithoutComments // 文档html格式内容
@@ -84,6 +87,8 @@ define([
         $.post(postUrl, postData, function(res) {
             if (res.code === "0") {
                 callback(res);
+            }else{
+                eventMgr.onError(res.msg || '更新文档出错，请稍后再试。');
             }
         }, 'JSON');
     };
@@ -194,6 +199,18 @@ define([
         },400);
     };
 
+
+    var changeStatus = false;
+    buttonAggDoc.onContentChanged = function() {
+        changeStatus = true;
+    };
+
+    window.onbeforeunload = function(evt){ 
+        evt = evt || window.event;
+        if(changeStatus){
+            evt.returnValue = "亲！离开前别忘了保存文章哦！";
+        }
+    };
 
     return buttonAggDoc;
 

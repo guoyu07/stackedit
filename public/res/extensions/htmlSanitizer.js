@@ -106,7 +106,7 @@ define([
 	//Attributes that have href and hence need to be sanitized
 	var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap");
 	var validAttrs = _.extend({}, uriAttrs, makeMap(
-			'abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,' +
+			'style','abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,' +
 			'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,' +
 			'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,' +
 			'scope,scrolling,shape,size,span,start,summary,target,title,type,' +
