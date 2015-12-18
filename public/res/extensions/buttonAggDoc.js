@@ -62,6 +62,7 @@ define([
             console.log('>>>更新文档结果', res);
             // 更新当前提交时间
             _defaultDocInfo.updateTime = res.data.updateTime;
+            _defaultDocInfo._id = _defaultDocInfo._id || res.data._id;
             eventMgr.onMessage('更新文档成功！');
         };
 
@@ -108,7 +109,8 @@ define([
 
         // 如果本地有对应id的文档就更新文档内容后，选择本地文档
         if(aggDocList.length > 0){
-            aggDocList[0].content = _defaultDocInfo.content || aggDocList[0].content;
+            //aggDocList[0].content = _defaultDocInfo.content || aggDocList[0].content; // 关闭使用本地缓存
+            aggDocList[0].content = _defaultDocInfo.content || '';
             aggDocList[0].title = _defaultDocInfo.title;
 
             fileMgr.selectFile(aggDocList[0]);
@@ -187,7 +189,7 @@ define([
             });
 
         // 更新导航栏聚合页连接
-        $fileAggnameNavbar.text(_defaultDocInfo.aggName).attr({href:'/agg?name='+_defaultDocInfo.aggName+'&doc='+_defaultDocInfo.aggName+'/'+_defaultDocInfo.title});
+        $fileAggnameNavbar.text(_defaultDocInfo.aggName + '/' + _defaultDocInfo.title).attr({href:'/agg?name='+_defaultDocInfo.aggName+'&doc='+_defaultDocInfo.aggName+'/'+_defaultDocInfo.title});
 
         // 打开默认文档
         _openDefaultDoc();
