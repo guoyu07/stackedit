@@ -10,7 +10,8 @@ define([
     var _defaultDocInfo = {},_defaultUserInfo;
 
     var buttonAggDoc = new Extension("buttonAggDoc", 'Save Document', true, true);
-    var $createDocAggName, $createDocAggDocTitle, $fileTitleNavbar, $documentList, $fileAggnameNavbar;
+    var $createDocAggName, $createDocAggDocTitle, $fileTitleNavbar, $documentList, $fileAggnameNavbar, $docSettingAgg, $docSettingAggForm;
+    var aggInfo;
 
     var _formatDoc = function(data) {
         return {
@@ -130,6 +131,60 @@ define([
         }
     };
 
+    /**
+     * 编辑AGG，获取AGG信息
+     */
+    var _getAggIngo = function(){
+        var $aggName = $docSettingAgg.find('.docsettings-agg-form-title'),
+            $aggList = $docSettingAgg.find('.docsettings-agg-form-list');
+
+        $.get('/aj/agg/get', { 
+            name:_defaultDocInfo.aggName 
+        } , function(res){
+            // 获取aggInfo
+            aggInfo = res;
+
+            // 设置聚合页list
+            var listInfo = JSON.stringify(res.list,{},2);
+            $aggList.val(listInfo);
+
+            // 设置聚合页名称
+            $aggName.val(aggInfo.title);
+            console.log(res);
+        }, 'JSON');
+    };
+    /**
+     * 设置聚合页信息
+     */
+    var _setAggInfo = function(){
+        if(!aggInfo){alert("设置聚合页失败：没有聚合页信息！");return;}
+
+        var $aggList = $docSettingAgg.find('.docsettings-agg-form-list');
+
+        var listInfo = $aggList.val(),listArr,listString;
+        try{
+            listArr = JSON.parse(listInfo);
+            listString = JSON.stringify(listArr);
+        }catch(err){
+            alert('数组格式不合法!');
+            return;
+        }
+
+        $.post('/aj/agg/edit',{
+            list : listString,
+            name : aggInfo.name,
+            portrait : aggInfo.portrait,
+            title : aggInfo.title
+        }, function(res){
+            if(res.code == "0"){
+                $docSettingAgg.modal('hide');
+                eventMgr.onMessage('更新聚合页成功！');
+            }else{
+                alert(res.msg);
+            }
+        }, 'JSON');
+    };
+
     if (window.Meilishuo && window.Meilishuo.constant && window.Meilishuo.constant) {
         _defaultUserInfo = window.Meilishuo.constant.userInfo || {};
         _defaultDocInfo = _formatDoc(window.Meilishuo.constant.docInfo||{});
@@ -178,11 +233,24 @@ define([
         $fileTitleNavbar = $(".file-title-navbar");
         $documentList = $('.document-list');
         $fileAggnameNavbar = $('.agg-name-navbar');
+        $docSettingAgg = $('.modal-docsettings-agg');
+        $docSettingAggForm = $('.docsettings-agg-form');
 
         $('.action-button-docsave').on('click', function() {
             _submitDoc(selectedFileDesc);
         });
 
+        // 当编辑聚合页的模态框弹出时
+        $docSettingAgg.on('show.bs.modal', function () {
+            _getAggIngo();
+        });
+
+        $docSettingAggForm.on('submit', function(evt){
+            evt.preventDefault();
+            _setAggInfo();
+        });
+
+        // 编辑BBOX生成的表单日历控件
         $('.form-control-bbox-otime').datepicker()
             .on('changeDate', function() {
                 $(this).datepicker('hide');

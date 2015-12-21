@@ -1503,28 +1503,22 @@
 				<h2 class="modal-title">Agg settings</h2>
 			</div>
 			<div class="modal-body">
-				<form class="form-horizontal">
+				<form class="form-horizontal docsettings-agg-form">
 				  <div class="form-group">
-				    <label for="aggName" class="col-sm-3 control-label">聚合页名称</label>
-				    <div class="col-sm-9">
-				      <input disabled="true" type="text" class="form-control" id="aggName" placeholder="Email">
+				    <!-- <label for="aggTitle" class="col-sm-3 control-label">聚合页名称</label> -->
+				    <div class="col-sm-12">
+				      <input disabled="true" type="text" class="form-control docsettings-agg-form-title" id="aggTitle" name="title">
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label for="aggId" class="col-sm-3 control-label">聚合页ID</label>
-				    <div class="col-sm-9">
-				      <input disabled="true" type="text" class="form-control" id="aggId" placeholder="Password">
+				    <!-- <label for="aggContent" class="col-sm-3 control-label">聚合页设置</label> -->
+				    <div class="col-sm-12">
+				      <textarea class="form-control  docsettings-agg-form-list" rows="15" id="aggContent" name="list" style="font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;"></textarea>
 				    </div>
 				  </div>
 				  <div class="form-group">
-				    <label for="aggContent" class="col-sm-3 control-label">聚合页设置</label>
-				    <div class="col-sm-9">
-				      <textarea class="form-control" rows="3" id="aggContent"></textarea>
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <div class="col-sm-offset-3 col-sm-9">
-				      <button type="submit" class="btn btn-primary col-sm-2">确定</button> 
+				    <div class="col-sm-12">
+				      <button type="submit" class="btn btn-primary col-sm-2">确定</button>
 				      <button type="submit" class="btn btn-default col-sm-2 col-sm-offset-1" data-dismiss="modal">取消</button>
 				    </div>
 				  </div>
