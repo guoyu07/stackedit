@@ -12,6 +12,8 @@ define([
     var buttonAggDoc = new Extension("buttonAggDoc", 'Save Document', true, true);
     var $createDocAggName, $createDocAggDocTitle, $fileTitleNavbar, $documentList, $fileAggnameNavbar, $docSettingAgg, $docSettingAggForm;
     var aggInfo;
+    
+    var changeStatus = false; // 文档编辑状态
 
     var _formatDoc = function(data) {
         return {
@@ -64,6 +66,10 @@ define([
             // 更新当前提交时间
             _defaultDocInfo.updateTime = res.data.updateTime;
             _defaultDocInfo._id = _defaultDocInfo._id || res.data._id;
+
+            // 更新文档编辑状态
+            changeStatus = false;
+
             eventMgr.onMessage('更新文档成功！');
         };
 
@@ -270,7 +276,6 @@ define([
     };
 
 
-    var changeStatus = false;
     buttonAggDoc.onContentChanged = function() {
         changeStatus = true;
     };

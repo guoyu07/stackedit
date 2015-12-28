@@ -21249,7 +21249,7 @@ function() {
 }), define("text!html/buttonAggDocSettings.html", [], function() {
  return '<div class="menu-panel-docsettings">\n	<a href="#" class="list-group-item" data-toggle="modal" data-target=".modal-docsettings-agg">\n		<div><i class="icon-folder-open"></i> Agg Settings</div>\n		<small>Document Aggregate Settings</small>\n	</a>\n	<a href="#" class="list-group-item" data-toggle="modal" data-target=".modal-docsettings-bbox" style="display:none;">\n		<div><i class="icon-music"></i> Bbox Settings</div>\n		<small>Bbox Document Settings</small>\n	</a>\n</div>\n';
 }), define("extensions/buttonAggDoc", [ "jquery", "underscore", "storage", "classes/Extension", "text!html/buttonAggDocSave.html", "text!html/buttonAggDocSettings.html", "fileSystem" ], function(e, t, n, i, r, o, a) {
- var s, l, c, u, d, p, h, f, m, g = {}, v = new i("buttonAggDoc", "Save Document", !0, !0), b = function(e) {
+ var s, l, c, u, d, p, h, f, m, g = {}, v = new i("buttonAggDoc", "Save Document", !0, !0), b = !1, y = function(e) {
   return {
    _id: e._id || "",
    title: e.title || "",
@@ -21258,7 +21258,7 @@ function() {
    content: e.mdContent || "",
    updateTime: e.updateTime || ""
   };
- }, y = function() {
+ }, x = function() {
   var e, n = "", i = [ "<li><a", ' class="list-group-item<%= fileDesc._id === selectedId ? " active" : "" %>"', ' href="/agg/doc?name=<%= fileDesc.aggName %>&doc=<%= fileDesc.aggName + "/" + fileDesc.title %>">', '   <%= fileDesc.aggName + "/" + fileDesc.composeTitle() %>', "</a></li>" ].join("");
   return e = t.filter(a, function(e) {
    return "agg" == e.fileType ? !0 : void 0;
@@ -21268,10 +21268,10 @@ function() {
     selectedId: g._id
    });
   }), n = '<ul class="nav">' + n + "</ul>";
- }, x = function(t, n) {
+ }, w = function(t, n) {
   n = n || function(e) {
    console.log(">>>\u66f4\u65b0\u6587\u6863\u7ed3\u679c", e), g.updateTime = e.data.updateTime, 
-   g._id = g._id || e.data._id, _.onMessage("\u66f4\u65b0\u6587\u6863\u6210\u529f\uff01");
+   g._id = g._id || e.data._id, b = !1, k.onMessage("\u66f4\u65b0\u6587\u6863\u6210\u529f\uff01");
   };
   var i, r = {
    _id: g._id || void 0,
@@ -21280,25 +21280,25 @@ function() {
    creator: g.creator,
    curUpdateTime: g.updateTime,
    mdContent: t.content,
-   htmlContent: E
+   htmlContent: D
   };
   i = r._id ? "/aj/agg/editdoc" : "/aj/agg/newdoc", e.post(i, r, function(e) {
-   "0" === e.code ? n(e) : _.onError(e.msg || "\u66f4\u65b0\u6587\u6863\u51fa\u9519\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5\u3002");
+   "0" === e.code ? n(e) : k.onError(e.msg || "\u66f4\u65b0\u6587\u6863\u51fa\u9519\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5\u3002");
   }, "JSON");
- }, w = function() {
+ }, C = function() {
   var e, n;
   n = t.filter(a, function(e) {
    return "agg" == e.fileType && e._id == g._id ? !0 : void 0;
-  }), n.length > 0 ? (n[0].content = g.content || "", n[0].title = g.title, k.selectFile(n[0])) : setTimeout(function() {
-   e = k.createFile({
+  }), n.length > 0 ? (n[0].content = g.content || "", n[0].title = g.title, T.selectFile(n[0])) : setTimeout(function() {
+   e = T.createFile({
     fileType: "agg",
     title: g.title,
     _id: g._id,
     aggName: g.aggName,
     content: g.content
-   }), k.selectFile(e);
+   }), T.selectFile(e);
   }, 100);
- }, C = function() {
+ }, S = function() {
   var t = h.find(".docsettings-agg-form-title"), n = h.find(".docsettings-agg-form-list");
   e.get("/aj/agg/get", {
    name: g.aggName
@@ -21307,7 +21307,7 @@ function() {
    var i = JSON.stringify(e.list, {}, 2);
    n.val(i), t.val(m.title), console.log(e);
   }, "JSON");
- }, S = function() {
+ }, _ = function() {
   if (!m) return void alert("\u8bbe\u7f6e\u805a\u5408\u9875\u5931\u8d25\uff1a\u6ca1\u6709\u805a\u5408\u9875\u4fe1\u606f\uff01");
   var t, n, i = h.find(".docsettings-agg-form-list"), r = i.val();
   try {
@@ -21321,53 +21321,51 @@ function() {
    portrait: m.portrait,
    title: m.title
   }, function(e) {
-   "0" == e.code ? (h.modal("hide"), _.onMessage("\u66f4\u65b0\u805a\u5408\u9875\u6210\u529f\uff01")) : alert(e.msg);
+   "0" == e.code ? (h.modal("hide"), k.onMessage("\u66f4\u65b0\u805a\u5408\u9875\u6210\u529f\uff01")) : alert(e.msg);
   }, "JSON");
  };
  window.Meilishuo && window.Meilishuo.constant && window.Meilishuo.constant && (s = window.Meilishuo.constant.userInfo || {}, 
- g = b(window.Meilishuo.constant.docInfo || {}));
- var _;
- v.onEventMgrCreated = function(e) {
-  _ = e;
- };
+ g = y(window.Meilishuo.constant.docInfo || {}));
  var k;
- v.onFileMgrCreated = function(e) {
+ v.onEventMgrCreated = function(e) {
   k = e;
  };
- var T, E;
+ var T;
+ v.onFileMgrCreated = function(e) {
+  T = e;
+ };
+ var E, D;
  v.onPreviewFinished = function(e, t) {
-  T = e, E = t;
+  E = e, D = t;
  }, v.onCreateButton = function() {
   return r;
  }, v.onCreateMenuButton = function() {
   return e(o)[0];
  };
- var D;
- v.onFileSelected = function(t) {
-  D = t, "agg" == t.fileType ? (e(".action-button-docsave").show(), e(".menu-panel-docsettings").show()) : (e(".action-button-docsave").hide(), 
+ var N;
+ return v.onFileSelected = function(t) {
+  N = t, "agg" == t.fileType ? (e(".action-button-docsave").show(), e(".menu-panel-docsettings").show()) : (e(".action-button-docsave").hide(), 
   e(".menu-panel-docsettings").hide());
  }, v.onReady = function() {
   l = e("#createDocAggName"), c = e("#createDocAggDocTitle"), u = e(".file-title-navbar"), 
   d = e(".document-list"), p = e(".agg-name-navbar"), h = e(".modal-docsettings-agg"), 
   f = e(".docsettings-agg-form"), e(".action-button-docsave").on("click", function() {
-   x(D);
+   w(N);
   }), h.on("show.bs.modal", function() {
-   C();
+   S();
   }), f.on("submit", function(e) {
-   e.preventDefault(), S();
+   e.preventDefault(), _();
   }), e(".form-control-bbox-otime").datepicker().on("changeDate", function() {
    e(this).datepicker("hide");
   }), p.text(g.aggName + "/" + g.title).attr({
    href: "/agg?name=" + g.aggName + "&doc=" + g.aggName + "/" + g.title
-  }), w(), setTimeout(function() {
-   d.html(y());
+  }), C(), setTimeout(function() {
+   d.html(x());
   }, 400);
- };
- var N = !1;
- return v.onContentChanged = function() {
-  N = !0;
+ }, v.onContentChanged = function() {
+  b = !0;
  }, window.onbeforeunload = function(e) {
-  e = e || window.event, N && (e.returnValue = "\u4eb2\uff01\u79bb\u5f00\u524d\u522b\u5fd8\u4e86\u4fdd\u5b58\u6587\u7ae0\u54e6\uff01");
+  e = e || window.event, b && (e.returnValue = "\u4eb2\uff01\u79bb\u5f00\u524d\u522b\u5fd8\u4e86\u4fdd\u5b58\u6587\u7ae0\u54e6\uff01");
  }, v;
 }), function(e) {
  var t = "waitForImages";
