@@ -21247,9 +21247,9 @@ function() {
 }), define("text!html/buttonAggDocSave.html", [], function() {
  return '<button class="btn btn-success action-button-docsave">\u4fdd\u5b58</button>';
 }), define("text!html/buttonAggDocSettings.html", [], function() {
- return '<div class="menu-panel-docsettings">\n	<a href="#" class="list-group-item" data-toggle="modal" data-target=".modal-docsettings-agg">\n		<div><i class="icon-folder-open"></i> Agg Settings</div>\n		<small>Document Aggregate Settings</small>\n	</a>\n	<a href="#" class="list-group-item" data-toggle="modal" data-target=".modal-docsettings-bbox" style="display:none;">\n		<div><i class="icon-music"></i> Bbox Settings</div>\n		<small>Bbox Document Settings</small>\n	</a>\n</div>\n';
+ return '<div class="menu-panel-docsettings" id="menuPanelDocsettings">\n	<a href="#" class="list-group-item" data-toggle="modal" data-target=".modal-docsettings-agg">\n		<div><i class="icon-folder-open"></i> \u7f16\u8f91\u805a\u5408\u9875</div>\n	</a>\n	<a href="#" class="list-group-item" data-toggle="modal" data-target=".modal-docsettings-bbox" style="display:none;">\n		<div><i class="icon-music"></i> Bbox Settings</div>\n		<small>Bbox Document Settings</small>\n	</a>\n	<a href="#" data-toggle="collapse" data-target=".collapse-agg-content"\n	class="list-group-item">\n		<div><i class="icon-th-list"></i> \u6253\u5f00\u805a\u5408\u9875\u6587\u6863...</div>\n	</a>\n	<div class="sub-menu collapse collapse-agg-content clearfix">\n		<h5 class="collapse-agg-title"><i class="icon-angle-down"></i> \u805a\u5408\u9875</h5>\n		<ul class="nav collapse-agg-list">\n			<li class="collapse-agg-item"><a>Blogger</a></li>\n			<li class="collapse-agg-item"><a>Blogger Page</a></li>\n			<li class="collapse-agg-item"><a>Dropbox</a></li>\n			<li class="collapse-agg-item"><a>Gist</a></li>\n			<li class="collapse-agg-item"><a>GitHub</a></li>\n			<li class="collapse-agg-item"><a>Google Drive</a></li>\n			<li class="collapse-agg-item"><a>SSH server</a></li>\n			<li class="collapse-agg-item"><a>Tumblr</a></li>\n			<li class="collapse-agg-item"><a>WordPress</a></li>\n		</ul>\n		<h5 class="collapse-agg-title"><i class="icon-angle-down"></i> \u805a\u5408\u9875</h5>\n		<ul class="nav collapse-agg-list">\n			<li class="collapse-agg-item"><a>Blogger</a></li>\n			<li class="collapse-agg-item"><a>Blogger Page</a></li>\n			<li class="collapse-agg-item"><a>Dropbox</a></li>\n			<li class="collapse-agg-item"><a>Gist</a></li>\n			<li class="collapse-agg-item"><a>GitHub</a></li>\n			<li class="collapse-agg-item"><a>Google Drive</a></li>\n			<li class="collapse-agg-item"><a>SSH server</a></li>\n			<li class="collapse-agg-item"><a>Tumblr</a></li>\n			<li class="collapse-agg-item"><a>WordPress</a></li>\n		</ul>\n	</div>\n</div>';
 }), define("extensions/buttonAggDoc", [ "jquery", "underscore", "storage", "classes/Extension", "text!html/buttonAggDocSave.html", "text!html/buttonAggDocSettings.html", "fileSystem" ], function(e, t, n, i, r, o, a) {
- var s, l, c, u, d, p, h, f, m, g = {}, v = new i("buttonAggDoc", "Save Document", !0, !0), b = !1, y = function(e) {
+ var s, l, c, u, d, p, h, f, m, g, v = {}, b = new i("buttonAggDoc", "Save Document", !0, !0), y = !1, x = function(e) {
   return {
    _id: e._id || "",
    title: e.title || "",
@@ -21258,57 +21258,67 @@ function() {
    content: e.mdContent || "",
    updateTime: e.updateTime || ""
   };
- }, x = function() {
+ }, w = function() {
   var e, n = "", i = [ "<li><a", ' class="list-group-item<%= fileDesc._id === selectedId ? " active" : "" %>"', ' href="/agg/doc?name=<%= fileDesc.aggName %>&doc=<%= fileDesc.aggName + "/" + fileDesc.title %>">', '   <%= fileDesc.aggName + "/" + fileDesc.composeTitle() %>', "</a></li>" ].join("");
   return e = t.filter(a, function(e) {
    return "agg" == e.fileType ? !0 : void 0;
   }), t.forEach(e, function(e) {
-   n += t.template(i, {
+   n = t.template(i, {
     fileDesc: e,
-    selectedId: g._id
-   });
+    selectedId: v._id
+   }) + n;
   }), n = '<ul class="nav">' + n + "</ul>";
- }, w = function(t, n) {
+ }, C = function(t, n) {
   n = n || function(e) {
-   console.log(">>>\u66f4\u65b0\u6587\u6863\u7ed3\u679c", e), g.updateTime = e.data.updateTime, 
-   g._id = g._id || e.data._id, b = !1, k.onMessage("\u66f4\u65b0\u6587\u6863\u6210\u529f\uff01");
+   console.log(">>>\u66f4\u65b0\u6587\u6863\u7ed3\u679c", e), v.updateTime = e.data.updateTime, 
+   v._id = v._id || e.data._id, y = !1, E.onMessage("\u66f4\u65b0\u6587\u6863\u6210\u529f\uff01");
   };
   var i, r = {
-   _id: g._id || void 0,
-   title: g.title,
-   category: g.aggName,
-   creator: g.creator,
-   curUpdateTime: g.updateTime,
+   _id: v._id || void 0,
+   title: v.title,
+   category: v.aggName,
+   creator: v.creator,
+   curUpdateTime: v.updateTime,
    mdContent: t.content,
-   htmlContent: D
+   htmlContent: M
   };
   i = r._id ? "/aj/agg/editdoc" : "/aj/agg/newdoc", e.post(i, r, function(e) {
-   "0" === e.code ? n(e) : k.onError(e.msg || "\u66f4\u65b0\u6587\u6863\u51fa\u9519\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5\u3002");
+   "0" === e.code ? n(e) : E.onError(e.msg || "\u66f4\u65b0\u6587\u6863\u51fa\u9519\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5\u3002");
   }, "JSON");
- }, C = function() {
+ }, S = function() {
   var e, n;
   n = t.filter(a, function(e) {
-   return "agg" == e.fileType && e._id == g._id ? !0 : void 0;
-  }), n.length > 0 ? (n[0].content = g.content || "", n[0].title = g.title, T.selectFile(n[0])) : setTimeout(function() {
-   e = T.createFile({
+   return "agg" == e.fileType && e._id == v._id ? !0 : void 0;
+  }), n.length > 0 ? (n[0].content = v.content || "", n[0].title = v.title, D.selectFile(n[0])) : setTimeout(function() {
+   e = D.createFile({
     fileType: "agg",
-    title: g.title,
-    _id: g._id,
-    aggName: g.aggName,
-    content: g.content
-   }), T.selectFile(e);
+    title: v.title,
+    _id: v._id,
+    aggName: v.aggName,
+    content: v.content
+   }), D.selectFile(e);
   }, 100);
- }, S = function() {
+ }, _ = function(e) {
+  var t, n = "";
+  return e = e || [], e.forEach(function(e) {
+   n += '<h5 class="collapse-agg-title"><i class="icon-angle-down"></i> ' + e.title + '</h5><ul class="nav collapse-agg-list">', 
+   e.doclist = e.doclist || [], e.doclist.forEach(function(e) {
+    t = e.doc.replace("/agg?", "/agg/doc?"), n += '<li class="collapse-agg-item"><a href="' + t + '">' + e.title + "</a></li>";
+   }), n += "</ul>";
+  }), n || "\u805a\u5408\u9875\u6682\u65f6\u6ca1\u6709\u6587\u6863\u5217\u8868";
+ }, k = function() {
   var t = h.find(".docsettings-agg-form-title"), n = h.find(".docsettings-agg-form-list");
   e.get("/aj/agg/get", {
-   name: g.aggName
+   name: v.aggName
   }, function(e) {
-   m = e;
+   g = e;
    var i = JSON.stringify(e.list, {}, 2);
-   n.val(i), t.val(m.title), console.log(e);
+   n.val(i), t.val(g.title);
+   var r = _(e.list);
+   console.log(r), m.find(".collapse-agg-content").html(r), console.log(e);
   }, "JSON");
- }, _ = function() {
-  if (!m) return void alert("\u8bbe\u7f6e\u805a\u5408\u9875\u5931\u8d25\uff1a\u6ca1\u6709\u805a\u5408\u9875\u4fe1\u606f\uff01");
+ }, T = function() {
+  if (!g) return void alert("\u8bbe\u7f6e\u805a\u5408\u9875\u5931\u8d25\uff1a\u6ca1\u6709\u805a\u5408\u9875\u4fe1\u606f\uff01");
   var t, n, i = h.find(".docsettings-agg-form-list"), r = i.val();
   try {
    t = JSON.parse(r), n = JSON.stringify(t);
@@ -21317,56 +21327,58 @@ function() {
   }
   e.post("/aj/agg/edit", {
    list: n,
-   name: m.name,
-   portrait: m.portrait,
-   title: m.title
+   name: g.name,
+   portrait: g.portrait,
+   title: g.title
   }, function(e) {
-   "0" == e.code ? (h.modal("hide"), k.onMessage("\u66f4\u65b0\u805a\u5408\u9875\u6210\u529f\uff01")) : alert(e.msg);
+   "0" == e.code ? (h.modal("hide"), E.onMessage("\u66f4\u65b0\u805a\u5408\u9875\u6210\u529f\uff01")) : alert(e.msg);
   }, "JSON");
  };
  window.Meilishuo && window.Meilishuo.constant && window.Meilishuo.constant && (s = window.Meilishuo.constant.userInfo || {}, 
- g = y(window.Meilishuo.constant.docInfo || {}));
- var k;
- v.onEventMgrCreated = function(e) {
-  k = e;
+ v = x(window.Meilishuo.constant.docInfo || {}));
+ var E;
+ b.onEventMgrCreated = function(e) {
+  E = e;
  };
- var T;
- v.onFileMgrCreated = function(e) {
-  T = e;
+ var D;
+ b.onFileMgrCreated = function(e) {
+  D = e;
  };
- var E, D;
- v.onPreviewFinished = function(e, t) {
-  E = e, D = t;
- }, v.onCreateButton = function() {
+ var N, M;
+ b.onPreviewFinished = function(e, t) {
+  N = e, M = t;
+ }, b.onCreateButton = function() {
   return r;
- }, v.onCreateMenuButton = function() {
+ }, b.onCreateMenuButton = function() {
   return e(o)[0];
  };
- var N;
- return v.onFileSelected = function(t) {
-  N = t, "agg" == t.fileType ? (e(".action-button-docsave").show(), e(".menu-panel-docsettings").show()) : (e(".action-button-docsave").hide(), 
-  e(".menu-panel-docsettings").hide());
- }, v.onReady = function() {
+ var I;
+ return b.onFileSelected = function(t) {
+  I = t, "agg" == t.fileType ? (e(".action-button-docsave").show(), m.show()) : (e(".action-button-docsave").hide(), 
+  m.hide());
+ }, b.onReady = function() {
   l = e("#createDocAggName"), c = e("#createDocAggDocTitle"), u = e(".file-title-navbar"), 
   d = e(".document-list"), p = e(".agg-name-navbar"), h = e(".modal-docsettings-agg"), 
-  f = e(".docsettings-agg-form"), e(".action-button-docsave").on("click", function() {
-   w(N);
+  f = e(".docsettings-agg-form"), m = e("#menuPanelDocsettings"), e(".action-button-docsave").on("click", function() {
+   C(I);
   }), h.on("show.bs.modal", function() {
-   S();
+   k();
+  }), h.on("hidden.bs.modal", function() {
+   k();
   }), f.on("submit", function(e) {
-   e.preventDefault(), _();
+   e.preventDefault(), T();
   }), e(".form-control-bbox-otime").datepicker().on("changeDate", function() {
    e(this).datepicker("hide");
-  }), p.text(g.aggName + "/" + g.title).attr({
-   href: "/agg?name=" + g.aggName + "&doc=" + g.aggName + "/" + g.title
-  }), C(), setTimeout(function() {
-   d.html(x());
+  }), p.text(v.aggName + "/" + v.title).attr({
+   href: "/agg?name=" + v.aggName + "&doc=" + v.aggName + "/" + v.title
+  }), S(), k(), setTimeout(function() {
+   d.html(w());
   }, 400);
- }, v.onContentChanged = function() {
-  b = !0;
+ }, b.onContentChanged = function() {
+  y = !0;
  }, window.onbeforeunload = function(e) {
-  e = e || window.event, b && (e.returnValue = "\u4eb2\uff01\u79bb\u5f00\u524d\u522b\u5fd8\u4e86\u4fdd\u5b58\u6587\u7ae0\u54e6\uff01");
- }, v;
+  e = e || window.event, y && (e.returnValue = "\u4eb2\uff01\u79bb\u5f00\u524d\u522b\u5fd8\u4e86\u4fdd\u5b58\u6587\u7ae0\u54e6\uff01");
+ }, b;
 }), function(e) {
  var t = "waitForImages";
  e.waitForImages = {

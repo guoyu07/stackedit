@@ -10,7 +10,7 @@ define([
     var _defaultDocInfo = {},_defaultUserInfo;
 
     var buttonAggDoc = new Extension("buttonAggDoc", 'Save Document', true, true);
-    var $createDocAggName, $createDocAggDocTitle, $fileTitleNavbar, $documentList, $fileAggnameNavbar, $docSettingAgg, $docSettingAggForm;
+    var $createDocAggName, $createDocAggDocTitle, $fileTitleNavbar, $documentList, $fileAggnameNavbar, $docSettingAgg, $docSettingAggForm, $menuPanelDocsettings;
     var aggInfo;
     
     var changeStatus = false; // 文档编辑状态
@@ -45,10 +45,10 @@ define([
         });
 
         _.forEach(aggDocList, function(item){
-            aggDocListHTML += _.template(documentEltTmpl, {
+            aggDocListHTML = _.template(documentEltTmpl, {
                 fileDesc: item,
                 selectedId: _defaultDocInfo._id
-            });
+            }) + aggDocListHTML;
         });
 
 
@@ -138,9 +138,31 @@ define([
     };
 
     /**
+     * 获取聚合页列表的HTML
+     */
+    var _getAggListHTML = function(aggList) {
+        var aggListHTML = '', itemUrl;
+            aggList = aggList || [];
+
+        aggList.forEach(function(item){
+            aggListHTML += '<h5 class="collapse-agg-title"><i class="icon-angle-down"></i> '+item.title+'</h5><ul class="nav collapse-agg-list">';
+
+            item.doclist = item.doclist || [];
+            item.doclist.forEach(function(subItem){
+                itemUrl = subItem.doc.replace('/agg?','/agg/doc?');
+                aggListHTML += '<li class="collapse-agg-item"><a href="'+itemUrl+'">'+subItem.title+'</a></li>';
+            });
+
+            aggListHTML +='</ul>';
+        });
+
+        return aggListHTML || '聚合页暂时没有文档列表';
+    };
+
+    /**
      * 编辑AGG，获取AGG信息
      */
-    var _getAggIngo = function(){
+    var _getAggInfo = function(){
         var $aggName = $docSettingAgg.find('.docsettings-agg-form-title'),
             $aggList = $docSettingAgg.find('.docsettings-agg-form-list');
 
@@ -156,6 +178,11 @@ define([
 
             // 设置聚合页名称
             $aggName.val(aggInfo.title);
+
+            // 设置聚合页选择列表
+            var aggListHTML = _getAggListHTML(res.list);console.log(aggListHTML);
+            $menuPanelDocsettings.find('.collapse-agg-content').html(aggListHTML);
+
             console.log(res);
         }, 'JSON');
     };
@@ -226,10 +253,10 @@ define([
 
         if (fileDesc.fileType == 'agg') {
             $('.action-button-docsave').show();
-            $('.menu-panel-docsettings').show();
+            $menuPanelDocsettings.show();
         } else {
             $('.action-button-docsave').hide();
-            $('.menu-panel-docsettings').hide();
+            $menuPanelDocsettings.hide();
         }
     };
 
@@ -241,6 +268,7 @@ define([
         $fileAggnameNavbar = $('.agg-name-navbar');
         $docSettingAgg = $('.modal-docsettings-agg');
         $docSettingAggForm = $('.docsettings-agg-form');
+        $menuPanelDocsettings = $('#menuPanelDocsettings');
 
         $('.action-button-docsave').on('click', function() {
             _submitDoc(selectedFileDesc);
@@ -248,7 +276,12 @@ define([
 
         // 当编辑聚合页的模态框弹出时
         $docSettingAgg.on('show.bs.modal', function () {
-            _getAggIngo();
+            _getAggInfo();
+        });
+
+        // 当编辑聚合页的模态框隐藏时
+        $docSettingAgg.on('hidden.bs.modal', function () {
+            _getAggInfo();
         });
 
         $docSettingAggForm.on('submit', function(evt){
@@ -267,6 +300,9 @@ define([
 
         // 打开默认文档
         _openDefaultDoc();
+
+        // 生成聚合页列表
+        _getAggInfo();
 
         // 更新历史文档列表
         // 首先生成文档，然后再生成历史文档列表，所以延时400ms
