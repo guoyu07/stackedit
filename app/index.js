@@ -54,8 +54,10 @@ app.get('/viewer', function(req, res) {
 
 // 模拟数据接口
 app.all('/data/*', function(req, res) {
-	var curPath = req.path.slice(5);
-	res.end(JSON.stringify(data[curPath] || {}));
+	res.end(JSON.stringify(data[req.path] || {}));
+});
+app.all('/aj/*', function(req, res) {
+	res.end(JSON.stringify(data[req.path] || {}));
 });
 
 // Error 404

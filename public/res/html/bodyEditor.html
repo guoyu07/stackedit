@@ -41,6 +41,7 @@
 				</ul>
 				<ul class="nav pull-right title-container">
 					<li><div class="working-indicator"></div></li>
+					<li><button class="btn btn-success agg-name-sync" data-toggle="modal" data-target=".modal-docsync-blog">发布到mlsfe.biz</button></li>
 					<li><a class="btn btn-success agg-name-navbar" target="_blank" href="#"
 						title="查看聚合页"> </a></li>
 					<!-- <li><a class="btn btn-success file-title-navbar" href="#"
@@ -1523,6 +1524,51 @@
 				    </div>
 				  </div>
 				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade modal-docsync-blog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h2 class="modal-title">发布到mlsfe.biz</h2>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal docsync-blog-form">
+				  <div class="form-group">
+				    <label for="aggTitle" class="col-sm-3 control-label">博客标题</label>
+				    <div class="col-sm-9">
+				    	<input type="text" class="form-control docsync-blog-form-title" name="title"/>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="aggTitle" class="col-sm-3 control-label">博客分类</label>
+				    <div class="col-sm-9">
+				    	<select name="cateblog" class="form-control docsync-blog-form-cateblog">
+							<option>没有博客分类</option>
+				    	</select>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				  	<label for="aggTitle" class="col-sm-3 control-label"></label>
+				    <div class="col-sm-9">
+				      <button type="submit" class="btn btn-primary col-sm-2">发布</button>
+				      <button type="button" class="btn btn-default col-sm-2 col-sm-offset-1" data-dismiss="modal">取消</button>
+				    </div>
+				  </div>
+				</form>
+				<hr/>
+				<blockquote>
+					<p class="text-muted">1. 发布之后访问: <a href="http://mlsfe.biz/home" target="_blank">http://mlsfe.biz</a> 即可看到该文章</p>
+					<p class="text-muted">2.  请务必确保文档中<span class="text-danger">没有任何敏感信息</span>（IP、密码、个人联系方式等）</p>
+					<p class="text-muted">3. 高质量的博客靠大家一同维护，欢迎发布优秀文档哦 ：）</p>
+				</blockquote>
 			</div>
 		</div>
 	</div>

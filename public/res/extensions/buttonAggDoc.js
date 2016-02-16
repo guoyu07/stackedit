@@ -10,7 +10,7 @@ define([
     var _defaultDocInfo = {},_defaultUserInfo;
 
     var buttonAggDoc = new Extension("buttonAggDoc", 'Save Document', true, true);
-    var $createDocAggName, $createDocAggDocTitle, $fileTitleNavbar, $documentList, $fileAggnameNavbar, $docSettingAgg, $docSettingAggForm, $menuPanelDocsettings;
+    var $createDocAggName, $createDocAggDocTitle, $fileTitleNavbar, $documentList, $fileAggnameNavbar, $docSettingAgg, $docSettingAggForm, $menuPanelDocsettings,$docSyncBlog,$docSyncBlogForm;
     var aggInfo;
     
     var changeStatus = false; // 文档编辑状态
@@ -21,6 +21,7 @@ define([
             title: data.title || '', // 文档Title
             creator: data.creator || _defaultUserInfo.name, // 文档作者
             aggName: data.category || '', // 文档所属AGG
+            cateblog: data.cateblog || '', // 文档博客分类
             content: data.mdContent || '', // 文档markdown内容
             updateTime: data.updateTime || ''// 文档更新时间
         };
@@ -78,6 +79,7 @@ define([
             _id         : _defaultDocInfo._id || undefined,
             title       : _defaultDocInfo.title,
             category    : _defaultDocInfo.aggName,
+            cateblog    : _defaultDocInfo.cateblog,
             creator     : _defaultDocInfo.creator,
             curUpdateTime   : _defaultDocInfo.updateTime,
 
@@ -113,6 +115,8 @@ define([
                 return true;
             }
         });
+
+        $docSyncBlog.find('.docsync-blog-form-title').val(_defaultDocInfo.title);
 
         // 如果本地有对应id的文档就更新文档内容后，选择本地文档
         if(aggDocList.length > 0){
@@ -180,7 +184,7 @@ define([
             $aggName.val(aggInfo.title);
 
             // 设置聚合页选择列表
-            var aggListHTML = _getAggListHTML(res.list);console.log(aggListHTML);
+            var aggListHTML = _getAggListHTML(res.list);
             $menuPanelDocsettings.find('.collapse-agg-content').html(aggListHTML);
 
             console.log(res);
@@ -212,6 +216,71 @@ define([
             if(res.code == "0"){
                 $docSettingAgg.modal('hide');
                 eventMgr.onMessage('更新聚合页成功！');
+            }else{
+                alert(res.msg);
+            }
+        }, 'JSON');
+    };
+    var _getSyncCateInfo = function(){
+        var $cateList = $docSyncBlog.find('.docsync-blog-form-cateblog');
+
+        var cateblog = _defaultDocInfo.cateblog;
+
+        $.get('/aj/agg/synccate', function(res){
+            var cateList = [],cateListHTML,selected;
+            if(res.code === 0){
+                cateList = res.data;
+            }
+            $.each(cateList, function(index, item){
+                selected = cateblog == item.id ? 'selected' : '';
+                cateListHTML += '<option value="'+item.id+'" ' + selected +'>'+item.name+'</option>';
+            });
+            $cateList.html(cateListHTML);            
+        }, 'JSON');
+
+    };
+    /**
+     * 获取文档简介
+     * @param  {String} html 文档的html片段
+     * @return {String}      文档简介
+     */
+    var _getIntroContent = function(html){
+        var htmlContent = $(html),result = '';
+         for(var i=0;i < 10;i++){
+             if(!htmlContent[i]){break;}
+             if(!htmlContent[i].outerHTML){continue;}
+
+             result += htmlContent[i].outerHTML;
+         }
+        return result;
+    };
+    /**
+     * 设置聚合页信息
+     */
+    var _syncBlog = function(fileDesc){
+        var cateblog = $docSyncBlog.find('.docsync-blog-form-cateblog').val();
+        var title = $docSyncBlog.find('.docsync-blog-form-title').val();
+
+        // 获取基本数据
+        var postData = {
+            is_new      : _defaultDocInfo._id ? 0 : 1,
+            _id         : _defaultDocInfo._id || undefined,
+            title       : title || _defaultDocInfo.title,
+            cateblog    : cateblog,
+            category    : _defaultDocInfo.aggName,
+            creator     : _defaultDocInfo.creator,
+            curUpdateTime   : _defaultDocInfo.updateTime,
+
+            mdContent   : fileDesc.content, // 文档markdown格式内容
+            htmlContent : htmlWithoutComments, // 文档html格式内容
+            introContent : _getIntroContent(htmlWithoutComments), // 文档html格式的介绍
+        };
+
+        $.post('/aj/agg/syncdoc', postData, function(res){
+            console.log(postData);
+            if(res.code == "0"){
+                $docSyncBlog.modal('hide');
+                eventMgr.onMessage('同步到聚合页成功：http://mlsfe.biz/post/content/',{ life: 5000 });
             }else{
                 alert(res.msg);
             }
@@ -268,6 +337,8 @@ define([
         $fileAggnameNavbar = $('.agg-name-navbar');
         $docSettingAgg = $('.modal-docsettings-agg');
         $docSettingAggForm = $('.docsettings-agg-form');
+        $docSyncBlog = $('.modal-docsync-blog');
+        $docSyncBlogForm = $('.docsync-blog-form');
         $menuPanelDocsettings = $('#menuPanelDocsettings');
 
         $('.action-button-docsave').on('click', function() {
@@ -287,6 +358,19 @@ define([
         $docSettingAggForm.on('submit', function(evt){
             evt.preventDefault();
             _setAggInfo();
+        });
+
+        $docSyncBlog.on('show.bs.modal', function () {
+            _getSyncCateInfo();
+        });
+
+        $docSyncBlog.on('hidden.bs.modal', function () {
+            _getSyncCateInfo();
+        });
+
+        $docSyncBlogForm.on('submit', function(evt){
+            evt.preventDefault();
+            _syncBlog(selectedFileDesc);
         });
 
         // 编辑BBOX生成的表单日历控件
